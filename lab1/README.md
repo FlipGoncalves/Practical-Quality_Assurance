@@ -1,0 +1,1 @@
+In the lab1_2 folder there is a txt file "lab1_2e" with a written response for the 2nd question, alinea e).
