@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="Geocode.AddressResolverTest" time="0.327" tests="2" errors="2" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="Geocode.AddressResolverTest" time="0.419" tests="2" errors="2" skipped="0" failures="0">
   <properties>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
     <property name="java.specification.version" value="11"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="PT"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk/lib"/>
-    <property name="sun.java.command" value="/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire/surefirebooter13151805578285737180.jar /home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire 2022-03-18T10-56-53_925-jvmRun1 surefire5603152684119905768tmp surefire_018018229980911287263tmp"/>
+    <property name="sun.java.command" value="/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire/surefirebooter17306809996661591753.jar /home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire 2022-03-21T17-24-49_903-jvmRun1 surefire16169053964840109276tmp surefire_017920037885810596357tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/test-classes:/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/classes:/home/flip/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.1/junit-jupiter-engine-5.7.1.jar:/home/flip/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/flip/.m2/repository/org/junit/platform/junit-platform-engine/1.7.1/junit-platform-engine-1.7.1.jar:/home/flip/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.1/junit-jupiter-api-5.7.1.jar:/home/flip/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/flip/.m2/repository/org/junit/platform/junit-platform-commons/1.7.1/junit-platform-commons-1.7.1.jar:/home/flip/.m2/repository/org/junit/vintage/junit-vintage-engine/5.7.1/junit-vintage-engine-5.7.1.jar:/home/flip/.m2/repository/junit/junit/4.13/junit-4.13.jar:/home/flip/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/flip/.m2/repository/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar:/home/flip/.m2/repository/org/mockito/mockito-core/4.4.0/mockito-core-4.4.0.jar:/home/flip/.m2/repository/net/bytebuddy/byte-buddy/1.12.8/byte-buddy-1.12.8.jar:/home/flip/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.8/byte-buddy-agent-1.12.8.jar:/home/flip/.m2/repository/org/objenesis/objenesis/3.2/objenesis-3.2.jar:/home/flip/.m2/repository/org/mockito/mockito-junit-jupiter/4.4.0/mockito-junit-jupiter-4.4.0.jar:/home/flip/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/home/flip/.m2/repository/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar:/home/flip/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/flip/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/home/flip/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire/surefirebooter13151805578285737180.jar"/>
+    <property name="surefire.real.class.path" value="/home/flip/Área de Trabalho/TQS/lab2/lab2_2/target/surefire/surefirebooter17306809996661591753.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.15+3"/>
     <property name="user.name" value="flip"/>
@@ -56,14 +56,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="findAddressForLocationBad" classname="Geocode.AddressResolverTest" time="0.321">
+  <testcase name="findAddressForLocationBad" classname="Geocode.AddressResolverTest" time="0.414">
     <error type="java.lang.NullPointerException">java.lang.NullPointerException
-	at Geocode.AddressResolverTest.findAddressForLocationBad(AddressResolverTest.java:46)
+	at Geocode.AddressResolverTest.findAddressForLocationBad(AddressResolverTest.java:44)
 </error>
   </testcase>
-  <testcase name="findAddressForLocationTest" classname="Geocode.AddressResolverTest" time="0.001">
+  <testcase name="findAddressForLocationTest" classname="Geocode.AddressResolverTest" time="0">
     <error type="java.lang.NullPointerException">java.lang.NullPointerException
-	at Geocode.AddressResolverTest.findAddressForLocationTest(AddressResolverTest.java:33)
+	at Geocode.AddressResolverTest.findAddressForLocationTest(AddressResolverTest.java:34)
 </error>
   </testcase>
 </testsuite>

@@ -1,12 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: Geocode.AddressResolverTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.327 s <<< FAILURE! - in Geocode.AddressResolverTest
-findAddressForLocationBad  Time elapsed: 0.321 s  <<< ERROR!
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.419 s <<< FAILURE! - in Geocode.AddressResolverTest
+findAddressForLocationBad  Time elapsed: 0.414 s  <<< ERROR!
 java.lang.NullPointerException
-	at Geocode.AddressResolverTest.findAddressForLocationBad(AddressResolverTest.java:46)
+	at Geocode.AddressResolverTest.findAddressForLocationBad(AddressResolverTest.java:44)
 
-findAddressForLocationTest  Time elapsed: 0.001 s  <<< ERROR!
+findAddressForLocationTest  Time elapsed: 0 s  <<< ERROR!
 java.lang.NullPointerException
-	at Geocode.AddressResolverTest.findAddressForLocationTest(AddressResolverTest.java:33)
+	at Geocode.AddressResolverTest.findAddressForLocationTest(AddressResolverTest.java:34)
 
