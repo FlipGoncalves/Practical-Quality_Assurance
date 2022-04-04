@@ -1,14 +1,13 @@
 package lab3_2.CarInformationAPI;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarService {
-    public Car getCarById(Long id);
+    public Optional<Car> getCarById(Long id);
 
     public List<Car> getAllCars();
 
-    public boolean exists(Long id);
-
-    public Car save(Car car);
+    public Car createCar(Car car);
 
 }

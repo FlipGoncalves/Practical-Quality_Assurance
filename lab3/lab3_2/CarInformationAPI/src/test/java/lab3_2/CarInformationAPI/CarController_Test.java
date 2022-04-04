@@ -4,19 +4,20 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
+import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,32 +39,34 @@ class CarController_Test {
 	@Test
 	void POST_Test( ) throws Exception {
 		Car car = new Car((long) 1100, "BMW", "A5"); 		// (CarId, CarMaker, CarModel)
-		when(service.save(Mockito.any())).thenReturn(car);
+		when(service.createCar(Mockito.any())).thenReturn(car);
 
         mvc.perform(
-                post("/api/car").contentType(MediaType.APPLICATION_JSON).content(JsonUtils.toJson(car)))
+                post("/api/car").contentType(MediaType.APPLICATION_JSON).content(asJsonString(car)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(1100)));
+                .andExpect(jsonPath("$.maker", is("BMW")));
 
-        verify(service, times(1)).save(Mockito.any());
+        verify(service, times(1)).createCar(Mockito.any());
     }
 
     @Test
 	void GET_Test( ) throws Exception {
-		Car car1 = new Car((long) 1100, "BMW", "A5"); 		// (CarId, CarMaker, CarModel)
-		Car car2 = new Car((long) 1101, "Ford", "Fiasco"); 
-		Car car3 = new Car((long) 1102, "Toyota", "YAris"); 
-		List<Car> cars = Arrays.asList(car1, car2, car3);
-		when(service.getAllCars()).thenReturn(cars);
+		Car car1 = new Car(1L, "BMW", "A5"); 		// (CarId, CarMaker, CarModel)
+
+		given(service.getCarById(1L)).willReturn(Optional.of(car1));
 
 		mvc.perform(
-                get("/api/getallcars").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].id", is(1100)))
-                .andExpect(jsonPath("$[1].id", is(1101)))
-                .andExpect(jsonPath("$[2].id", is(1102)));
+                get("/api/car/1")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.maker", is(car1.getMaker())));
 
-        verify(service, times(1)).save(Mockito.any());
+        verify(service, VerificationModeFactory.times(1)).getCarById(Mockito.any());
+    }
+
+    public static String asJsonString( final Object obj ) {
+        try {
+          return new ObjectMapper().writeValueAsString( obj );
+        } catch (Exception e) {
+          throw new RuntimeException( e );
+        }
     }
 }

@@ -1,13 +1,19 @@
 package lab3_2.CarInformationAPI;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Table(name = "tqs_car")
 public class Car {
+    @Column
     private String maker;
+    @Column
     private String model;
     @Id
     private long id;
@@ -41,6 +47,4 @@ public class Car {
     public void setId(long id) {
         this.id = id;
     }
-
-    
 }

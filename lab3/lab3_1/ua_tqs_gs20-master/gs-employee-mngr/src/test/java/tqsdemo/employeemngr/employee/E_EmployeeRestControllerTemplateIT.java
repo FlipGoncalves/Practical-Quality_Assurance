@@ -12,7 +12,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import tqsdemo.employeemngr.data.Employee;
 import tqsdemo.employeemngr.data.EmployeeRepository;
 

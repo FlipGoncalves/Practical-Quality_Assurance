@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * tries to autoconfigure the database, if possible (e.g.: in memory db)
  */
 @DataJpaTest
-class A_EmployeeRepositoryTest {
+class CarRepository_Test {
 
     // get a test-friendly Entity Manager
     @Autowired
@@ -23,19 +26,29 @@ class A_EmployeeRepositoryTest {
     private CarRepository car_rep;
 
     @Test
+    public void persistence_Test() {
+        Car alex = new Car( 1000L, "Seat", "Ibiza" );
+        entityManager.persistAndFlush( alex );
+        
+        Optional<Car> found = car_rep.findById( alex.getId() );
+        assertThat( found.isPresent() ).isTrue();
+        assertThat( found.get() ).isEqualTo( alex );
+    }
+
+    @Test
     void findByid_Test() {
         Car car1 = new Car((long) 1000, "BMW", "A5"); 
         entityManager.persistAndFlush(car1);
 
-        Car fromDb = car_rep.findById(car1.getId()).orElse(null);
+        Optional<Car> fromDb = car_rep.findById(car1.getId());
         assertThat(fromDb).isNotNull();
-        assertThat(fromDb.getId()).isEqualTo( car1.getId());
+        assertThat(fromDb.get().getId()).isEqualTo( car1.getId());
     }
 
     @Test
     void findByid_Fail_Test() {
-        Car fromDb = car_rep.findById((long) -4).orElse(null);
-        assertThat(fromDb).isNull();
+        Optional<Car> fromDb = car_rep.findById((long) -4);
+        assertThat(fromDb).isEmpty();
     }
 
     @Test
