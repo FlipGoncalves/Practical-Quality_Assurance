@@ -2,17 +2,20 @@ package PageObjectPattern;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
+import static io.github.bonigarcia.seljup.BrowserType.CHROME;
+import org.openqa.selenium.WebDriver;
+import io.github.bonigarcia.seljup.Arguments;
 import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SeleniumJupiter.class)
-public class AppTest {
+public class FirefoxDockerHeadlessTest {
+
 
   @Test
-  public void buyTicketDocker(FirefoxDriver driver) {
+  public void buyTicketDocker(@DockerBrowser(type = CHROME) @Arguments("--headless") WebDriver driver) {
 
     driver.get("https://blazedemo.com/");
     Travel travelPointPick = new Travel(driver, 5);
