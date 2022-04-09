@@ -1,28 +1,36 @@
 package TQS_HW1.HW1.HTTP;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Component;
 
-public class HttpAPI implements HttpClient {
+@Component
+public class HttpAPI {
     public HttpAPI() {}
 
-    @Override
     public String doHttpGet(String url) throws IOException {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpGet request = new HttpGet(url);
-        CloseableHttpResponse response = client.execute(request);
+        // url = https://covid-193.p.rapidapi.com/statistics
+        // url = https://covid-193.p.rapidapi.com/history?country=usa&day=2022-04-07
+
+        HttpRequest request;
+        HttpResponse<String> response = null;
+
         try {
-            HttpEntity entity = response.getEntity();
-            return EntityUtils.toString(entity);
-        } finally {
-            if( response != null)
-                response.close();
+            request = HttpRequest.newBuilder()
+				.uri(URI.create(url))
+				.header("X-RapidAPI-Host", "covid-193.p.rapidapi.com")
+				.header("X-RapidAPI-Key", "a018835eb8mshd880c64e6cbdf04p1c10f4jsn952450b38f9f")
+				.method("GET", HttpRequest.BodyPublishers.noBody())
+				.build();
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            System.err.println(e);
         }
+
+        return response.body();
     }
 }
