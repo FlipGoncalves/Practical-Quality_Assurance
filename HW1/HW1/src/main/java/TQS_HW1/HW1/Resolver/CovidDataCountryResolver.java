@@ -30,7 +30,7 @@ public class CovidDataCountryResolver {
         covid.setCountry(jsonArray.getJSONObject(0).getString("country"));
         covid.setContinent(jsonArray.getJSONObject(0).getString("continent"));
         covid.setDay(jsonArray.getJSONObject(0).getString("day"));
-
+        //System.out.println(jsonArray);
         JSONObject cases = jsonArray.getJSONObject(0).getJSONObject("cases");
         //System.out.println(cases);
         covid.setNew_cases(cases.getString("new"));

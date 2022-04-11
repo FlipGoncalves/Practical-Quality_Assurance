@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>W3.CSS Template</title>
+<title>TQS HW1</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -15,7 +15,28 @@
 <body>
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
   <div class="w3-display-middle card-index">
-    <h1 class="w3-jumbo w3-animate-top">Portugal</h1>
+    <h1 class="w3-jumbo w3-animate-top" th:text="${Country1.country}"></h1>
+    <h3 class="w3-animate-top">Cases</h3>
+    <h4 class="w3-animate-top">New</h4>
+    <label th:text="${Country1.new_cases}"></label>
+    <h4 class="w3-animate-top">Recovered</h4>
+    <label th:text="${Country1.recovered_cases}"></label>
+    <h4 class="w3-animate-top">Total</h4>
+    <label th:text="${Country1.total_cases}"></label>
+    <h4 class="w3-animate-top">Critical</h4>
+    <label th:text="${Country1.critical_cases}"></label>
+    <h4 class="w3-animate-top">Active</h4>
+    <label th:text="${Country1.active_cases}"></label>
+    <br><br>
+    <h3 class="w3-animate-top">Tests</h3>
+    <h4 class="w3-animate-top">Total</h4>
+    <label th:text="${Country1.total_tests}"></label>
+    <br><br>
+    <h3 class="w3-animate-top">Deaths</h3>
+    <h4 class="w3-animate-top">New</h4>
+    <label th:text="${Country1.new_deaths}"></label>
+    <h4 class="w3-animate-top">Total</h4>
+    <label th:text="${Country1.total_deaths}"></label>
   </div>
   <div class="w3-display-bottomleft w3-padding-large">
     Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
