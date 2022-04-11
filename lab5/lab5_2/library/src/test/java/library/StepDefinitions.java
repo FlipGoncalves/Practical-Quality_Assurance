@@ -3,33 +3,29 @@ package library;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.ParameterType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class StepDefinitions {
     Library library = new Library();
 	List<Book> result = new ArrayList<>();
 
-    @ParameterType("([0-9]{4})-([0-9]{2})-([0-9]{2})")
-	public Date iso8601Date(String year, String month, String day){
-		return new Date(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day),0, 0);
-	}
- 
-	@Given("(a|another) book with the title {string}, written by {string}, published in {iso8601Date}")
-	public void addNewBook(final String title, final String author, final Date published) {
-		Book book = new Book(title, author, published);
+	@Given("a(nother) book with the title {string}, written by {string}, published in {int} {word} {int}")
+	public void addNewBook(String string, String string2, Integer int1, String month, Integer int3) {
+		Book book = new Book(string, string2, LocalDateTime.of(int1, Month.valueOf(month.toUpperCase()).getValue(), int3, 0, 0));
 		library.addBook(book);
 	}
- 
-	@When("the customer searches for books published between {iso8601Date} and {iso8601Date}")
-	public void setSearchParameters(final Date from, final Date to) {
-		result = library.findBooks(from, to);
+
+	@When("the customer searches for books published between {int} and {int}")
+	public void setSearchParameters(final int year, final int year1) {
+		result = library.findBooks(LocalDateTime.of(year,1, 1, 0, 0), LocalDateTime.of(year1, 12, 31, 0, 0));
+		System.out.println(result);
 	}
- 
+
 	@Then("{int} books should have been found")
 	public void verifyAmountOfBooksFound(final int booksFound) {
 		assertEquals(result.size(), booksFound);
