@@ -1,5 +1,7 @@
 package TQS_HW1.HW1.Models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,8 @@ public class CovidDataCountry {
     private int total_tests;
     private String new_deaths;
     private int total_deaths;
+
+    private Date object_created = new Date(System.currentTimeMillis());
 
     public CovidDataCountry(String country, String continent, String day) {
         this.country = country;
@@ -123,6 +127,11 @@ public class CovidDataCountry {
         this.total_deaths = total_deaths;
     }
 
-    
+    public Date getObject_created() {
+        return object_created;
+    }
 
+    public void setObject_created(Date object_created) {
+        this.object_created = object_created;
+    }
 }

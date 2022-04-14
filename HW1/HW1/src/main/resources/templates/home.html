@@ -15,29 +15,38 @@
 <body>
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
   <div class="w3-display-middle card-index">
-    <h1 class="w3-jumbo w3-animate-top" th:text="${Country1.country}"></h1>
-    <h3 class="w3-animate-top">Cases</h3>
-    <h4 class="w3-animate-top">New</h4>
-    <label th:text="${Country1.new_cases}"></label>
-    <h4 class="w3-animate-top">Recovered</h4>
-    <label th:text="${Country1.recovered_cases}"></label>
-    <h4 class="w3-animate-top">Total</h4>
-    <label th:text="${Country1.total_cases}"></label>
-    <h4 class="w3-animate-top">Critical</h4>
-    <label th:text="${Country1.critical_cases}"></label>
-    <h4 class="w3-animate-top">Active</h4>
-    <label th:text="${Country1.active_cases}"></label>
-    <br><br>
-    <h3 class="w3-animate-top">Tests</h3>
-    <h4 class="w3-animate-top">Total</h4>
-    <label th:text="${Country1.total_tests}"></label>
-    <br><br>
-    <h3 class="w3-animate-top">Deaths</h3>
-    <h4 class="w3-animate-top">New</h4>
-    <label th:text="${Country1.new_deaths}"></label>
-    <h4 class="w3-animate-top">Total</h4>
-    <label th:text="${Country1.total_deaths}"></label>
+    <h1 class="w3-jumbo w3-animate-top" th:text="${Country[0].country}"></h1>
+    <div class="container" th:each="day: ${Country}">
+      <h2 th:text="${day.day}"></h2>          
+      <table class="table">
+        <thead>
+          <tr>
+            <th>New Cases</th>
+            <th>Recovered</th>
+            <th>Total Cases</th>
+            <th>Critical Cases</th>
+            <th>Active Cases</th>
+            <th>Total Tests</th>
+            <th>New Deaths</th>
+            <th>Total Deaths</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td th:text="${day.new_cases}"></td>
+            <td th:text="${day.recovered_cases}"></td>
+            <td th:text="${day.total_cases}"></td>
+            <td th:text="${day.critical_cases}"></td>
+            <td th:text="${day.active_cases}"></td>
+            <td th:text="${day.total_tests}"></td>
+            <td th:text="${day.new_deaths}"></td>
+            <td th:text="${day.total_deaths}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
   <div class="w3-display-bottomleft w3-padding-large">
     Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
   </div>

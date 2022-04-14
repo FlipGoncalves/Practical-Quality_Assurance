@@ -1,5 +1,6 @@
 package TQS_HW1.HW1.Controllers;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,7 @@ public class APIController {
     @Autowired
     private CovidDataRepository repository_data;
 
-    // @Autowired
-    // private UserRepository user_rep;
-
+    
     @GetMapping("/all_data")
     public List<CovidData> getData(@RequestParam(value = "data", required = false) String data) {
         List<CovidData> covid = service.getAllData();
@@ -34,12 +33,7 @@ public class APIController {
     }
 
     @GetMapping("/get_data/{country}/{date}")
-    public CovidDataCountry getDataByCountry(@PathVariable(value = "country" ) String country, @PathVariable(value = "date" ) String date) {
+    public CovidDataCountry getDataByCountry(@PathVariable(value = "country" ) String country, @PathVariable(value = "date" ) String date) throws ParseException {
         return service.getDataByCountry(country, date);
     }
-
-    // @PostMapping("/insert")
-    // public Tweet insertTweet(@Valid @RequestBody Data data){
-    //     return service.saveData(data);
-    // }
 }

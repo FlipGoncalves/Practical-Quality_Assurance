@@ -1,10 +1,12 @@
 package TQS_HW1.HW1.Services;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import TQS_HW1.HW1.Cache.Cache;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -19,35 +21,32 @@ public class CovidDataCountryService {
     @Autowired
     CovidDataResolver resolver_all;
 
-    public CovidDataCountry getDataByCountry(String country, String date) {
-        // Measurement result = cache.getMeasurement(lat, lon, location);
-        // cache stuff here
+    @Autowired
+    Cache cache;
 
+    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException {
+        CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
 
-        // if its not in cache
-        try {
-            result = resolver.getDataByCountry(country, date);
-            // store in cache
+        if (cachedData == null) {
+            try {
+                result = resolver.getDataByCountry(country, date);
+                cache.saveDataCountry(result);    
+            } catch (Exception e) {
+                System.err.println(e);
+            }
 
-        } catch (Exception e) {
-            System.err.println(e);
+            return result;
         }
 
-        return result;
+        return cachedData;
     }
 
     public List<CovidData> getAllData() {
-        // Measurement result = cache.getMeasurement(lat, lon, location);
-        // cache stuff here
-
         List<CovidData> result = null;
 
-        // if its not in cache
         try {
             result = resolver_all.getOverallData();
-            // store in cache
-
         } catch (Exception e) {
             System.err.println(e);
         }
