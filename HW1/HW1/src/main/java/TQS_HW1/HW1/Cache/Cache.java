@@ -38,7 +38,7 @@ public class Cache {
         if (data != null) {
             if (hasExpiredCountry(data)) {
                 log.info("Data expired in the cache");
-                covidcountry_rep.delete(data);
+                deleteDatafromCache(data);
                 return null;
             } else {
                 log.info("Data retrieved from cache");
@@ -61,6 +61,10 @@ public class Cache {
             log.info("Measurement {} was already on cache", result);
         }
         return result;
+    }
+
+    public void deleteDatafromCache(CovidDataCountry data)  {
+        covidcountry_rep.delete(data);
     }
 
     public boolean hasExpiredCountry(CovidDataCountry data) throws ParseException {

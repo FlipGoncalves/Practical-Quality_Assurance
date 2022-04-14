@@ -1,8 +1,10 @@
 package TQS_HW1.HW1.Services;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +26,19 @@ public class CovidDataCountryService {
     @Autowired
     Cache cache;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException {
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
 
         if (cachedData == null) {
             try {
-                result = resolver.getDataByCountry(country, date);
-                cache.saveDataCountry(result);    
-            } catch (Exception e) {
+                result = resolver.getDataByCountry(country, date);    
+            } catch (JSONException e) {
                 System.err.println(e);
+                return null;
             }
 
+            cache.saveDataCountry(result);
             return result;
         }
 

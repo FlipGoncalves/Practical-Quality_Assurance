@@ -1,6 +1,7 @@
 package TQS_HW1.HW1.Resolver;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,7 +17,14 @@ public class CovidDataCountryResolver {
     HttpAPI httpClient;
 
     public CovidDataCountry getDataByCountry(String country, String date) throws IOException {
-        String response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
+        String response = null;
+
+        try {
+            response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
+        } catch (JSONException e) {
+            System.err.println(e);
+            return null;
+        }
 
         return dataToJson(response);
     }

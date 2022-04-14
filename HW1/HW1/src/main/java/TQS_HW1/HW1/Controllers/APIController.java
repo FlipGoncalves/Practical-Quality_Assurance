@@ -1,5 +1,6 @@
 package TQS_HW1.HW1.Controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class APIController {
     }
 
     @GetMapping("/get_data/{country}/{date}")
-    public CovidDataCountry getDataByCountry(@PathVariable(value = "country" ) String country, @PathVariable(value = "date" ) String date) throws ParseException {
+    public CovidDataCountry getDataByCountry(@PathVariable(value = "country" ) String country, @PathVariable(value = "date" ) String date) throws ParseException, IOException {
         return service.getDataByCountry(country, date);
     }
 }
