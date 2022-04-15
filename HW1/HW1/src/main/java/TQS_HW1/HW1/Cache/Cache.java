@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
 @Component
 public class Cache {
 
-    private static int hits;
-    private static int misses;
-    private static int get_requests;
-    private static int save_requests;
-    private static int delete_requests;
+    private static int hits = 0;
+    private static int misses = 0;
+    private static int get_requests = 0;
+    private static int save_requests = 0;
+    private static int delete_requests = 0;
 
     @Autowired
     CovidDataCountryRepository covidcountry_rep;
@@ -62,9 +62,11 @@ public class Cache {
     }
 
     public CovidDataCountry saveDataCountry(CovidDataCountry data) {
+        save_requests++;
+
         CovidDataCountry datacheck = covidcountry_rep.findByCountryAndDay(data.getCountry(), data.getDay()).orElse(null);
         CovidDataCountry result;
-        save_requests++;
+    
         if (datacheck == null) {
             result = covidcountry_rep.saveAndFlush(data);
             log.info("Stored Data {} on cache", result);
@@ -79,6 +81,7 @@ public class Cache {
 
     public void deleteDatafromCache(CovidDataCountry data)  {
         delete_requests++;
+
         covidcountry_rep.delete(data);
     }
 
@@ -122,4 +125,32 @@ public class Cache {
         return delete_requests;
     }
 
+    // Testing issues
+    public static void setAll() {
+        Cache.setHits(0);
+        Cache.setDelete_requests(0);
+        Cache.setGet_requests(0);
+        Cache.setMisses(0);
+        Cache.setSave_requests(0);
+    }
+
+    public static void setHits(int hits) {
+        Cache.hits = hits;
+    }
+
+    public static void setMisses(int misses) {
+        Cache.misses = misses;
+    }
+
+    public static void setGet_requests(int get_requests) {
+        Cache.get_requests = get_requests;
+    }
+
+    public static void setSave_requests(int save_requests) {
+        Cache.save_requests = save_requests;
+    }
+
+    public static void setDelete_requests(int delete_requests) {
+        Cache.delete_requests = delete_requests;
+    }
 }

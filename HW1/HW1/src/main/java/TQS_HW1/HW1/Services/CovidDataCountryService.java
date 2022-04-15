@@ -45,7 +45,7 @@ public class CovidDataCountryService {
                 result = resolver.getDataByCountry(country, date); 
             } catch (JSONException e) {
                 System.err.println(e);
-                log.info("Error {}", e);
+                log.info("Error {}", e.toString());
                 return null;
             }
 
@@ -58,17 +58,17 @@ public class CovidDataCountryService {
     }
 
     public List<CovidData> getAllData() throws ParseException {
-        log.info("Getting Cached Data");
+        log.info("Getting All Cached Data");
         List<CovidData> cachedData = cacheall.getAllData();
         List<CovidData> result = null;
 
         if (cachedData == null) {
             try {
-                log.info("Getting Data from the API");  
+                log.info("Getting All Data from the API");  
                 result = resolver_all.getOverallData();
             } catch (Exception e) {
                 System.err.println(e);
-                log.info("Error {}", e);
+                log.info("Error {}", e.toString());
                 return null;
             }
 
@@ -77,6 +77,7 @@ public class CovidDataCountryService {
             return result;
         }
 
+        System.out.println(cachedData);
         return cachedData;
     }
 }

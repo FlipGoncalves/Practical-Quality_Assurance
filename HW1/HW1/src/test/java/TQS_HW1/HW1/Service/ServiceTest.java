@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import TQS_HW1.HW1.Cache.Cache;
+import TQS_HW1.HW1.Cache.CacheAllData;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -29,11 +30,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-class MeasurementServiceTest {
+class ServiceTest {
     CovidDataCountry coviddata;
 
     @Mock
     private Cache cache;
+
+    @Mock
+    private CacheAllData cacheall;
 
     @Mock
     private CovidDataCountryResolver coviddata_resolver;
@@ -62,7 +66,7 @@ class MeasurementServiceTest {
 
 
     @Test
-    public void testGetValidCovidData() throws ParseException, IOException {
+    public void testGetValidCovidDataCached() throws ParseException, IOException {
         when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
 
         CovidDataCountry found = service.getDataByCountry("Portugal", "2021-04-11");
@@ -72,9 +76,34 @@ class MeasurementServiceTest {
     }
 
     @Test
+    public void testGetValidAllCovidDataCached() throws IOException, ParseException {
+        List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
+        when(cacheall.getAllData()).thenReturn(mock);
+
+        List<CovidData> found = service.getAllData();
+
+        assertNotNull(found);
+        assertThat(found.size()).isGreaterThan(0);
+
+        verify(cacheall, times(1)).getAllData();
+    }
+
+    @Test
+    public void testGetValidCovidData() throws ParseException, IOException {
+        when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
+        when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(null);
+
+        CovidDataCountry found = service.getDataByCountry("Portugal", "2021-04-11");
+
+        verify(coviddata_resolver, times(1)).getDataByCountry(anyString(), anyString());
+        assertEquals(found, this.coviddata);
+    }
+
+    @Test
     public void testGetValidAllCovidData() throws IOException, ParseException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(covid_resolver.getOverallData()).thenReturn(mock);
+        when(cacheall.getAllData()).thenReturn(null);
 
         List<CovidData> found = service.getAllData();
 
@@ -111,16 +140,5 @@ class MeasurementServiceTest {
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenThrow(BadRequest.class);
 
         assertThrows(BadRequest.class, () -> { service.getDataByCountry("Portugal", "2021-04-11"); }, "All services unavailable.");
-    }
-
-    @Test
-    public void testGetCachedDate() throws ParseException, IOException {
-        when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
-
-        CovidDataCountry found = service.getDataByCountry("Portugal", "2021-04-11");
-
-        verify(cache, times(1)).getDataByCountry("Portugal", "2021-04-11");
-
-        assertThat(found).isEqualTo(this.coviddata);
     }
 }
