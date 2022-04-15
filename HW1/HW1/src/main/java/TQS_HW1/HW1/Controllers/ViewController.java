@@ -21,19 +21,25 @@ import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Services.CovidDataCountryService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 public class ViewController {
+	private static final Logger log = LoggerFactory.getLogger(ViewController.class);
+
 	@Autowired
     private CovidDataCountryService service;
 
 	@GetMapping("/home")
 	public String home(Model model) {
+		log.info("Get home template");
 		return "home";
 	}
 
 	@PostMapping("/home")
 	public String submitHome(@ModelAttribute("covidCountry") CovidData country, Model model) throws ParseException, IOException {
-
+		log.info("-- Start -- Get data for home template");
 		// date
 		String date;
 		int year = 2021;
@@ -59,9 +65,10 @@ public class ViewController {
 
 		List<CovidDataCountry> covid_data = new ArrayList<>();
 
+		log.info("Get data for country {}", country.getCountry());
 		for (int i = 0; i < 5; i++) {
 			String strDate = dateFormat.format(Date_date);
-			System.out.println(strDate);
+			log.info("Get data for day {}", strDate);
 
 			CovidDataCountry data = service.getDataByCountry(country.getCountry(), strDate);
 
@@ -80,15 +87,17 @@ public class ViewController {
 			Date_date = calendar.getTime();
 		}
 
-		System.out.println(covid_data);
+		log.info("Data for country {}: {}", country.getCountry(), covid_data);
 
 		model.addAttribute("Country", covid_data);
 
+		log.info("-- End -- Get data for home template");
 		return "home";
 	}
 
 	@GetMapping("/")
 	public String index(Model model) throws ParseException {
+		log.info("Get index template");
 		model.addAttribute("Country", service.getAllData());
 		return "index";
 	}

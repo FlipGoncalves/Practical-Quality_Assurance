@@ -12,22 +12,34 @@ import org.thymeleaf.exceptions.TemplateInputException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class CovidDataCountryResolver {
+    private static final Logger log = LoggerFactory.getLogger(CovidDataCountryResolver.class);
+
     @Autowired
     HttpAPI httpClient;
 
     public CovidDataCountry getDataByCountry(String country, String date) throws IOException {
         String response = null;
+        log.info("----- Start ----- Get data from the API");
 
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
+            log.info("-- Successfull");
         } catch (JSONException e) {
             System.err.println(e);
+            log.info("-- Error {}", e);
             return null;
         }
 
-        return dataToJson(response);
+        log.info("-- Transform data into CovidDataCountry object");
+        CovidDataCountry datajson = dataToJson(response);
+
+        log.info("----- End ----- Get data from the API");
+        return datajson;
     }
 
     public CovidDataCountry dataToJson(String data) {
@@ -57,6 +69,7 @@ public class CovidDataCountryResolver {
             covid.setTotal_deaths(deaths.getInt("total"));
             covid.setNew_deaths(deaths.getString("new"));
         } catch (TemplateInputException e) {
+            log.info("-- Error Tranforming data: {}", e);
             return null;
         } 
 

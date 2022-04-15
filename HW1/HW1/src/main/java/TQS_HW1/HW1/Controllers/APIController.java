@@ -19,9 +19,14 @@ import TQS_HW1.HW1.Repository.CovidDataCountryRepository;
 import TQS_HW1.HW1.Repository.CovidDataRepository;
 import TQS_HW1.HW1.Services.CovidDataCountryService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api")
 public class APIController {
+    private static final Logger log = LoggerFactory.getLogger(APIController.class);
+
     @Autowired
     private CovidDataCountryService service;
 
@@ -33,6 +38,7 @@ public class APIController {
     
     @GetMapping("/all_data")
     public List<CovidData> getData(@RequestParam(value = "data", required = false) String data) throws ParseException {
+        log.info("GET Request -> All Covid Data");
         List<CovidData> covid = service.getAllData();
         repository_data.saveAll(covid);
         return covid;
@@ -40,11 +46,13 @@ public class APIController {
 
     @GetMapping("/get_data/{country}/{date}")
     public CovidDataCountry getDataByCountry(@PathVariable(value = "country" ) String country, @PathVariable(value = "date" ) String date) throws ParseException, IOException {
+        log.info("GET Request -> Covid Data by country: {}, and date: {}", country, date);
         return service.getDataByCountry(country, date);
     }
 
     @GetMapping("/cache_statistics")
     public String getCacheStatistics() {
+        log.info("GET Request -> All Cache Statistics");
         String jsonString = new JSONObject()
                   .put("hits", Cache.getHits())
                   .put("misses", Cache.getMisses())
@@ -57,21 +65,25 @@ public class APIController {
 
     @GetMapping("/cache_data")
     public List<CovidDataCountry> getCachedData() {
+        log.info("GET Request -> All Cached Data");
         return country_rep.findAll();
     }
 
     @GetMapping("/get/country/{country}")
     public List<CovidDataCountry> getDataByCountry(@PathVariable(value = "country" ) String country) {
+        log.info("GET Request -> Covid Data by country: {}", country);
         return country_rep.findAllByCountry(country);
     }
 
     @GetMapping("/get/continent/{continent}")
     public List<CovidDataCountry> getDataByContinent(@PathVariable(value = "continent" ) String continent) {
+        log.info("GET Request -> Covid Data by continent: {}", continent);
         return country_rep.findAllByContinent(continent);
     }
 
     @GetMapping("/get/day/{day}")
     public List<CovidDataCountry> getDataByDay(@PathVariable(value = "day" ) String day) throws ParseException {
+        log.info("GET Request -> Covid Data by day: {}", day);
         return country_rep.findAllByDay(day);
     }
 }

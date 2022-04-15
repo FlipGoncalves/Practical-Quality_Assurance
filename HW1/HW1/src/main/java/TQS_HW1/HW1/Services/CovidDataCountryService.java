@@ -15,8 +15,12 @@ import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
 import TQS_HW1.HW1.Resolver.CovidDataResolver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
-public class CovidDataCountryService {
+public class CovidDataCountryService {    
+    private static final Logger log = LoggerFactory.getLogger(CovidDataCountryService.class);
 
     @Autowired
     CovidDataCountryResolver resolver;
@@ -31,17 +35,21 @@ public class CovidDataCountryService {
     CacheAllData cacheall;
 
     public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException {
+        log.info("Getting Cached Data");
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
 
         if (cachedData == null) {
             try {
-                result = resolver.getDataByCountry(country, date);    
+                log.info("Getting Data from the API");  
+                result = resolver.getDataByCountry(country, date); 
             } catch (JSONException e) {
                 System.err.println(e);
+                log.info("Error {}", e);
                 return null;
             }
 
+            log.info("Saving Data into cache");  
             cache.saveDataCountry(result);
             return result;
         }
@@ -50,17 +58,21 @@ public class CovidDataCountryService {
     }
 
     public List<CovidData> getAllData() throws ParseException {
-
+        log.info("Getting Cached Data");
         List<CovidData> cachedData = cacheall.getAllData();
         List<CovidData> result = null;
 
         if (cachedData == null) {
             try {
+                log.info("Getting Data from the API");  
                 result = resolver_all.getOverallData();
             } catch (Exception e) {
                 System.err.println(e);
+                log.info("Error {}", e);
+                return null;
             }
 
+            log.info("Saving Data into cache");  
             cacheall.saveData(result);
             return result;
         }
