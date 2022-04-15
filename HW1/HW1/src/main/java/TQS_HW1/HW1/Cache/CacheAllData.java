@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import TQS_HW1.HW1.Models.CovidDataCountry;
-import TQS_HW1.HW1.Repository.CovidDataCountryRepository;
+import TQS_HW1.HW1.Models.CovidData;
+import TQS_HW1.HW1.Repository.CovidDataRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class Cache {
+public class CacheAllData {
 
     private static int hits;
     private static int misses;
@@ -24,68 +24,72 @@ public class Cache {
     private static int delete_requests;
 
     @Autowired
-    CovidDataCountryRepository covidcountry_rep;
+    CovidDataRepository covidcountry_rep;
 
     private static final Logger log = LoggerFactory.getLogger(Cache.class);
     private int timeToLive; // in seconds
 
-    public Cache(int timeToLive) {
+    public CacheAllData(int timeToLive) {
         this.timeToLive = timeToLive;
     }
 
-    public Cache() {
+    public CacheAllData() {
         this.timeToLive = 120;
     }
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException {
+    public List<CovidData> getAllData() throws ParseException {
         get_requests++;
 
-        log.info("Getting Covid data for {} for the day {} in the cache", country, date);
-        CovidDataCountry data = covidcountry_rep.findByCountryAndDay(country, date).orElse(null);
+        log.info("Getting All Covid data in the cache");
+        List<CovidData> d = covidcountry_rep.findAll();
 
-        if (data != null) {
-            if (hasExpiredCountry(data)) {
-                log.info("Data expired in the cache");
+        if (!d.isEmpty()) {
+            if (hasExpired(d)) {
+                log.info("Data {} expired in the cache", d.getClass());
                 misses++;
-                deleteDatafromCache(data);
+                deleteDatafromCache(d);
                 return null;
             } else {
-                log.info("Data retrieved from cache");
+                log.info("Data {} retrieved from cache", d.getClass());
                 hits++;
-                return data;
+                return d;
             }
         } else {
             log.info("Covid Data not found in the cache");
-            misses++;                                                   // review this 
-            return null;
+            misses++;          
+            return null;                                       
         }
     }
 
-    public CovidDataCountry saveDataCountry(CovidDataCountry data) {
-        CovidDataCountry datacheck = covidcountry_rep.findByCountryAndDay(data.getCountry(), data.getDay()).orElse(null);
-        CovidDataCountry result;
+    public List<CovidData> saveData(List<CovidData> data) {
+        List<CovidData> datacheck = covidcountry_rep.findAll();
+        List<CovidData> result = null;
         save_requests++;
-        if (datacheck == null) {
-            result = covidcountry_rep.saveAndFlush(data);
-            log.info("Stored Data {} on cache", result);
+
+        if (datacheck.isEmpty()) {
+            result = covidcountry_rep.saveAllAndFlush(data);
+            log.info("Stored Data {} on cache", result.getClass());
             hits++;
+        } else if (datacheck.size() != data.size()) {
+            // do add for the different ones
         } else {
             result = datacheck;
-            log.info("Covid Data {} was already on cache", result);
+            log.info("Covid Data {} was already on cache", result.getClass());
             misses++;
         }
+
         return result;
     }
 
-    public void deleteDatafromCache(CovidDataCountry data)  {
+    public void deleteDatafromCache(List<CovidData> data)  {
         delete_requests++;
-        covidcountry_rep.delete(data);
+        covidcountry_rep.deleteAll(data);
     }
 
-    public boolean hasExpiredCountry(CovidDataCountry data) throws ParseException {
-        log.info("Checking if data {} is expired", data);
+    public boolean hasExpired(List<CovidData> data) throws ParseException {
+        log.info("Checking if data {} is expired", data.getClass());
         Date expiredDate = new Date(System.currentTimeMillis() - this.timeToLive * 1000);
-        Date dataDate = data.getObject_created();
+        Date dataDate = data.get(0).getObject_created();
         return dataDate.before(expiredDate);
     }
 
@@ -93,10 +97,10 @@ public class Cache {
     public void cleanCacheTimeout() {
         log.info("Running scheduled method to clean expired cached data");
         Date expiredDate = new Date(System.currentTimeMillis() - this.timeToLive * 1000);
-        List<CovidDataCountry> expiredCovidData = covidcountry_rep.findAllByDayIsLessThanEqual(expiredDate);
+        List<CovidData> expiredCovidData = covidcountry_rep.findAllByDateCreatedIsLessThanEqual(expiredDate);
 
-        for (CovidDataCountry data : expiredCovidData) {
-            log.info("Deleting expired Covid Data: {}", data);
+        for (CovidData data : expiredCovidData) {
+            log.info("Deleting expired Covid Data: {}", data.getClass());
             covidcountry_rep.delete(data);
         }
 

@@ -88,7 +88,7 @@ public class ViewController {
 	}
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model) throws ParseException {
 		model.addAttribute("Country", service.getAllData());
 		return "index";
 	}

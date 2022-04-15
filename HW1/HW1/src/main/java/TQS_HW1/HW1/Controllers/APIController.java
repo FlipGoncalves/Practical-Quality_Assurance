@@ -32,7 +32,7 @@ public class APIController {
     private CovidDataCountryRepository country_rep;
     
     @GetMapping("/all_data")
-    public List<CovidData> getData(@RequestParam(value = "data", required = false) String data) {
+    public List<CovidData> getData(@RequestParam(value = "data", required = false) String data) throws ParseException {
         List<CovidData> covid = service.getAllData();
         repository_data.saveAll(covid);
         return covid;

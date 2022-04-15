@@ -72,7 +72,7 @@ class MeasurementServiceTest {
     }
 
     @Test
-    public void testGetValidAllCovidData() throws IOException {
+    public void testGetValidAllCovidData() throws IOException, ParseException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(covid_resolver.getOverallData()).thenReturn(mock);
 

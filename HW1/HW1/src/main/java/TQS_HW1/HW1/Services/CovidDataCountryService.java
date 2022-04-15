@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import TQS_HW1.HW1.Cache.Cache;
+import TQS_HW1.HW1.Cache.CacheAllData;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -25,6 +26,9 @@ public class CovidDataCountryService {
 
     @Autowired
     Cache cache;
+
+    @Autowired
+    CacheAllData cacheall;
 
     public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException {
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
@@ -45,15 +49,22 @@ public class CovidDataCountryService {
         return cachedData;
     }
 
-    public List<CovidData> getAllData() {
+    public List<CovidData> getAllData() throws ParseException {
+
+        List<CovidData> cachedData = cacheall.getAllData();
         List<CovidData> result = null;
 
-        try {
-            result = resolver_all.getOverallData();
-        } catch (Exception e) {
-            System.err.println(e);
+        if (cachedData == null) {
+            try {
+                result = resolver_all.getOverallData();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+
+            cacheall.saveData(result);
+            return result;
         }
 
-        return result;
+        return cachedData;
     }
 }
