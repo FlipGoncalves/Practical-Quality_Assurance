@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface CovidDataCountryRepository extends JpaRepository<CovidDataCountry, Long> {
     Optional<CovidDataCountry> findByCountryAndDay(String country, String date);
     List<CovidDataCountry> findAllByDayIsLessThanEqual(Date date);
+    List<CovidDataCountry> findAllByDay(String date);
+    List<CovidDataCountry> findAllByCountry(String country);
     List<CovidDataCountry> findAllByContinent(String continent);
 }

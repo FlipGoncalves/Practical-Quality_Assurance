@@ -1,5 +1,6 @@
 package TQS_HW1.HW1.Controllers;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class ViewController {
 	}
 
 	@PostMapping("/home")
-	public String submitHome(@ModelAttribute("covidCountry") CovidData country, Model model) throws ParseException {
+	public String submitHome(@ModelAttribute("covidCountry") CovidData country, Model model) throws ParseException, IOException {
 
 		// date
 		String date;
@@ -62,15 +63,24 @@ public class ViewController {
 			String strDate = dateFormat.format(Date_date);
 			System.out.println(strDate);
 
-			try {
-				covid_data.add(service.getDataByCountry(country.getCountry(), strDate));
-			} catch(Exception e) {
-				return "index";
+			CovidDataCountry data = service.getDataByCountry(country.getCountry(), strDate);
+
+			if (data == null) {
+				CovidDataCountry covid = new CovidDataCountry();
+				covid.setDay(strDate);
+				covid.setCountry(country.getCountry());
+				covid.setNew_cases("0");
+				covid.setNew_deaths("0");
+				covid_data.add(covid);
+			} else {
+				covid_data.add(data);
 			}
 
 			calendar.add(Calendar.DATE, -1);
 			Date_date = calendar.getTime();
 		}
+
+		System.out.println(covid_data);
 
 		model.addAttribute("Country", covid_data);
 
