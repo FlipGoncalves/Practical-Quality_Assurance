@@ -1,5 +1,6 @@
 package TQS_HW1.HW1.Cache;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,13 +46,15 @@ class CacheTest {
         this.coviddata.setDay("2021-04-11");
     }
 
-    // make hits/misses/everything tests
+    @AfterEach
+    void tear() {
+
+        // when running all the tests at the same time
+        Cache.setAll();
+    }
 
     @Test
     void testGetValidCountryData() throws ParseException {
-
-        // needed when running all tests simultaneously
-        Cache.setAll();
 
         when(coviddata_rep.findByCountryAndDay("Portugal", "2021-04-11"))
                 .thenReturn(Optional.of(this.coviddata));
@@ -84,9 +87,6 @@ class CacheTest {
     @Test
     void testGetInValidCountryData() throws ParseException {
 
-        // needed when running all tests simultaneously
-        Cache.setAll();
-
         when(coviddata_rep.findByCountryAndDay("Portugal", "2021-04-11"))
                 .thenReturn(Optional.empty());
         
@@ -105,9 +105,6 @@ class CacheTest {
 
     @Test
     void testGetExpiredCacheData() throws ParseException {
-
-        // needed when running all tests simultaneously
-        Cache.setAll();
 
         Date date = new Date(System.currentTimeMillis() - 605 * 1000); // A date with more that 600 sec
         this.coviddata.setObject_created(date);
@@ -144,9 +141,6 @@ class CacheTest {
     @Test
     void testDeleteCacheData() {
 
-        // needed when running all tests simultaneously
-        Cache.setAll();
-
         cache.deleteDatafromCache(this.coviddata);
 
         assertEquals(Cache.getHits(), 0);
@@ -161,9 +155,6 @@ class CacheTest {
 
     @Test
     void testSaveCacheData() {
-
-        // needed when running all tests simultaneously
-        Cache.setAll();
 
         when(coviddata_rep.saveAndFlush(this.coviddata)).thenReturn(this.coviddata);
 
@@ -180,9 +171,6 @@ class CacheTest {
 
     @Test
     void testSaveCacheDataExistent() {
-
-        // needed when running all tests simultaneously
-        Cache.setAll();
 
         when(coviddata_rep.findByCountryAndDay("Portugal", "2021-04-11"))
                 .thenReturn(Optional.ofNullable(this.coviddata));

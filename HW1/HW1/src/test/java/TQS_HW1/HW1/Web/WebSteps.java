@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -38,8 +39,12 @@ public class WebSteps {
         assertEquals(driver.findElement(By.xpath("/html/body/div/div/h1")).getAttribute("innerHTML"), string);
     }
 
-    @Then("I should look at Critical Cases in the first line and see its {int}")
-    public void look_at_table(Integer int1) {
-        assertEquals(Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()), int1);
+    @Then("I should look at Critical Cases in the first line and see its {string}")
+    public void look_at_table(String str1) {
+        if (str1.equals("zero")) {
+            assertEquals(Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()), 0);
+        } else {
+            assertNotEquals(Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()), 0);
+        }
     }
 }
