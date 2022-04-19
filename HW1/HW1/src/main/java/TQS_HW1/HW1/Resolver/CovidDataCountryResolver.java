@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.exceptions.TemplateInputException;
 
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 
@@ -22,7 +23,7 @@ public class CovidDataCountryResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws IOException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException {
         String response = null;
         log.info("----- Start ----- Get data from the API");
 

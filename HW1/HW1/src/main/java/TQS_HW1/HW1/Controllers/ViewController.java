@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Services.CovidDataCountryService;
@@ -38,7 +39,7 @@ public class ViewController {
 	}
 
 	@PostMapping("/home")
-	public String submitHome(@ModelAttribute("covidCountry") CovidData country, Model model) throws ParseException, IOException {
+	public String submitHome(@ModelAttribute("covidCountry") CovidData country, Model model) throws ParseException, IOException, APINotRespondsException {
 		log.info("-- Start -- Get data for home template");
 		// date
 		String date;

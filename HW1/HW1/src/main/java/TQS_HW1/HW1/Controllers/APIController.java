@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import TQS_HW1.HW1.Cache.Cache;
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.Models.CacheView;
 import TQS_HW1.HW1.Models.CovidData;
@@ -50,7 +51,7 @@ public class APIController {
     }
 
     @GetMapping("/get_data")
-    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws ParseException, IOException, BadRequestException {
+    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws ParseException, IOException, BadRequestException, APINotRespondsException {
         log.info("GET Request -> Covid Data by country: {}, and date: {}", country, date);
 
         CovidDataCountry data = service.getDataByCountry(country, date);

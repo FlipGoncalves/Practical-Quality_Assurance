@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import TQS_HW1.HW1.Cache.Cache;
 import TQS_HW1.HW1.Cache.CacheAllData;
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -34,7 +35,7 @@ public class CovidDataCountryService {
     @Autowired
     CacheAllData cacheall;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException, APINotRespondsException {
         log.info("Getting Cached Data");
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;

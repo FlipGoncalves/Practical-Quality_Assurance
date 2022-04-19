@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidData;
 
@@ -24,7 +25,7 @@ public class CovidDataResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public List<CovidData> getOverallData() throws IOException {
+    public List<CovidData> getOverallData() throws IOException, APINotRespondsException {
         log.info("----- Start ----- Get data from the API");
 
         String response = null;

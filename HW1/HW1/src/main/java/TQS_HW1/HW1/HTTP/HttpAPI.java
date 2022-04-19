@@ -10,13 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import TQS_HW1.HW1.Exceptions.APINotRespondsException;
+
 @Component
 public class HttpAPI {
     private static final Logger log = LoggerFactory.getLogger(HttpAPI.class);
 
     public HttpAPI() {}
 
-    public String doHttpGet(String url) throws IOException {
+    public String doHttpGet(String url) throws IOException, APINotRespondsException {
         // url = https://covid-193.p.rapidapi.com/statistics
         // url = https://covid-193.p.rapidapi.com/history?country=usa&day=2022-04-07
 
@@ -36,7 +38,8 @@ public class HttpAPI {
             log.info("Successful API call");
         } catch (Exception e) {
             System.err.println(e);
-            log.info("Error: {}", e);
+            log.info("Error");
+            throw new APINotRespondsException("URL ("+url+") does not respond");
         }
 
         log.info("-- End -- API call to {}", url);
