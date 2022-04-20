@@ -33,12 +33,12 @@ class APIControllerCovidDataCountryIT {
     private CovidDataCountryRepository rep;
 
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
         rep.deleteAll();
     }
 
     @Test
-    public void testGetCountryData() throws Exception {
+    void testGetCountryData() throws Exception {
         CovidDataCountry data = createTestCountry();
 
         mvc.perform(get("/api/get_data/")
@@ -60,7 +60,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetCountryData_BadRequest_Country() throws Exception {
+    void testGetCountryData_BadRequest_Country() throws Exception {
         mvc.perform(get("/api/get_data")
                 .param("country", "ajshakjsghdh")
                 .param("date", "2021-04-11")
@@ -69,7 +69,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetCountryData_BadRequest_Date() throws Exception {
+    void testGetCountryData_BadRequest_Date() throws Exception {
         mvc.perform(get("/api/get_data")
                 .param("country", "Portugal")
                 .param("date", "2020-2020-2020")
@@ -78,14 +78,14 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetCountryData_BadRequest_NoParameters() throws Exception {
+    void testGetCountryData_BadRequest_NoParameters() throws Exception {
         mvc.perform(get("/api/get_data")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testGetCountryData_BadRequest_OnlyCountry() throws Exception {
+    void testGetCountryData_BadRequest_OnlyCountry() throws Exception {
         mvc.perform(get("/api/get_data")
                 .param("country", "Portugal")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -93,7 +93,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetCountryData_BadRequest_OnlyDate() throws Exception {
+    void testGetCountryData_BadRequest_OnlyDate() throws Exception {
         mvc.perform(get("/api/get_data")
                 .param("date", "2020-04-11")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -101,7 +101,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetCacheData() throws Exception {
+    void testGetCacheData() throws Exception {
         mvc.perform(get("/api/cache_statistics")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -114,7 +114,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetAllCacheData() throws Exception {
+    void testGetAllCacheData() throws Exception {
         CovidDataCountry data = createTestCountry();
         
         mvc.perform(get("/api/cache_data")
@@ -134,7 +134,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Country() throws Exception {
+    void testGetData_Country() throws Exception {
         CovidDataCountry data = createTestCountry();
 
         mvc.perform(get("/api/get/country")
@@ -155,7 +155,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Country_BadRequest_Country() throws Exception {
+    void testGetData_Country_BadRequest_Country() throws Exception {
         mvc.perform(get("/api/get/country")
                 .param("country", "sdfsdfgdfg")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -163,14 +163,14 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Country_BadRequest_NoParameters() throws Exception {
+    void testGetData_Country_BadRequest_NoParameters() throws Exception {
         mvc.perform(get("/api/get/country")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testGetData_Continent() throws Exception {
+    void testGetData_Continent() throws Exception {
         CovidDataCountry data = createTestCountry();
 
         mvc.perform(get("/api/get/continent")
@@ -191,7 +191,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Continent_BadRequest_Country() throws Exception {
+    void testGetData_Continent_BadRequest_Country() throws Exception {
         mvc.perform(get("/api/get/continent")
                 .param("continent", "sdfsdfgdfg")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -199,14 +199,14 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Continent_BadRequest_NoParameters() throws Exception {
+    void testGetData_Continent_BadRequest_NoParameters() throws Exception {
         mvc.perform(get("/api/get/continent")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testGetData_Day() throws Exception {
+    void testGetData_Day() throws Exception {
         CovidDataCountry data = createTestCountry();
 
         mvc.perform(get("/api/get/day")
@@ -227,7 +227,7 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Day_BadRequest_Country() throws Exception {
+    void testGetData_Day_BadRequest_Country() throws Exception {
         mvc.perform(get("/api/get/day")
                 .param("day", "sdfsdfgdfg")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -235,14 +235,14 @@ class APIControllerCovidDataCountryIT {
     }
 
     @Test
-    public void testGetData_Day_BadRequest_NoParameters() throws Exception {
+    void testGetData_Day_BadRequest_NoParameters() throws Exception {
         mvc.perform(get("/api/get/day")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testGetAllData() throws Exception {
+    void testGetAllData() throws Exception {
         mvc.perform(get("/api/all_data")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

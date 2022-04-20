@@ -1,5 +1,6 @@
 package TQS_HW1.HW1.Cache;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.text.ParseException;
@@ -60,7 +61,7 @@ public class Cache {
             }
         } else {
             log.info("Covid Data not found in the cache");
-            misses++;                                                   // review this 
+            misses++;                                               
             return null;
         }
     }
@@ -103,11 +104,11 @@ public class Cache {
         List<CovidData> d = covid_rep.findAll();
 
         if (!d.isEmpty()) {
-            if (hasExpired(d)) {
+            if (hasExpiredCountry(d)) {
                 log.info("Data {} expired in the cache", d.getClass());
                 misses++;
                 deleteDatafromCache(d);
-                return null;
+                return Arrays.asList();
             } else {
                 log.info("Data {} retrieved from cache", d.getClass());
                 hits++;
@@ -116,7 +117,7 @@ public class Cache {
         } else {
             log.info("Covid Data not found in the cache");
             misses++;          
-            return null;                                       
+            return Arrays.asList();                               
         }
     }
 
@@ -143,7 +144,7 @@ public class Cache {
         covid_rep.deleteAll(data);
     }
 
-    public boolean hasExpired(List<CovidData> data) throws ParseException {
+    public boolean hasExpiredCountry(List<CovidData> data) throws ParseException {
         log.info("Checking if data {} is expired", data.getClass());
         Date expiredDate = new Date(System.currentTimeMillis() - this.timeToLive * 1000);
         Date dataDate = data.get(0).getObject_created();

@@ -16,9 +16,7 @@ import TQS_HW1.HW1.Exceptions.APINotRespondsException;
 public class HttpAPI {
     private static final Logger log = LoggerFactory.getLogger(HttpAPI.class);
 
-    public HttpAPI() {}
-
-    public String doHttpGet(String url) throws IOException, APINotRespondsException {
+    public String doHttpGet(String url) throws IOException, APINotRespondsException, InterruptedException, NullPointerException {
         // url = https://covid-193.p.rapidapi.com/statistics
         // url = https://covid-193.p.rapidapi.com/history?country=usa&day=2022-04-07
 
@@ -36,9 +34,12 @@ public class HttpAPI {
 				.build();
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             log.info("Successful API call");
+        } catch (InterruptedException e) {
+            log.info("Error {}", e.toString());
+            Thread.currentThread().interrupt();
+            throw new NullPointerException();
         } catch (Exception e) {
-            System.err.println(e);
-            log.info("Error");
+            log.info("Error {}", e.toString());
             throw new APINotRespondsException("URL ("+url+") does not respond");
         }
 

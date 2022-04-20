@@ -2,6 +2,7 @@ package TQS_HW1.HW1.Services;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONException;
@@ -42,7 +43,6 @@ public class CovidDataCountryService {
                 log.info("Getting Data from the API");  
                 result = resolver.getDataByCountry(country, date); 
             } catch (JSONException e) {
-                System.err.println(e);
                 log.info("Error {}", e.toString());
                 return null;
             }
@@ -60,22 +60,20 @@ public class CovidDataCountryService {
         List<CovidData> cachedData = cache.getAllData();
         List<CovidData> result = null;
 
-        if (cachedData == null) {
+        if (cachedData.isEmpty()) {
             try {
                 log.info("Getting All Data from the API");  
                 result = resolver_all.getOverallData();
             } catch (Exception e) {
-                System.err.println(e);
                 log.info("Error {}", e.toString());
-                return null;
+                return Arrays.asList();
             }
 
             log.info("Saving Data into cache");  
             cache.saveData(result);
             return result;
         }
-
-        System.out.println(cachedData);
+        
         return cachedData;
     }
 }

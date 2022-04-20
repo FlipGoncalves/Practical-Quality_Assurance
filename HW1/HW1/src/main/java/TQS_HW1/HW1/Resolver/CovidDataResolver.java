@@ -34,9 +34,11 @@ public class CovidDataResolver {
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/statistics");
             log.info("-- Successfull: {}", response);
+        } catch (InterruptedException e) {
+            log.info("-- Error {}", e.toString());
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
-            System.err.println(e);
-            log.info("-- Error {}", e);
+            log.info("-- Error {}", e.toString());
             throw new BadRequestException("Bad API Reuqest");
         }
 
@@ -61,7 +63,7 @@ public class CovidDataResolver {
 
             return result;
         } catch (JSONException e) {
-            log.info("-- Error Tranforming data: {}", e);
+            log.info("-- Error Tranforming data: {}", e.toString());
             throw new JSONException("JSON Exception");
         }
     }

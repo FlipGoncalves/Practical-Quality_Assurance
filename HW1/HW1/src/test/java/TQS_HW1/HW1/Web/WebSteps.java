@@ -26,7 +26,7 @@ public class WebSteps {
         Select dropdown = new Select(driver.findElement(By.name("country")));
         dropdown.selectByValue(string);
 
-        assertEquals(dropdown.getAllSelectedOptions().size(), 1);
+        assertEquals(1, dropdown.getAllSelectedOptions().size());
     }
 
     @When("I click on Submit")
@@ -42,9 +42,9 @@ public class WebSteps {
     @Then("I should look at Critical Cases in the first line and see its {string}")
     public void look_at_table(String str1) {
         if (str1.equals("zero")) {
-            assertEquals(Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()), 0);
+            assertEquals(0, Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()));
         } else {
-            assertNotEquals(Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()), 0);
+            assertNotEquals(0, Integer.parseInt(driver.findElement(By.xpath("/html/body/div/div/div[1]/table/tbody/tr/td[4]")).getText()));
         }
     }
 }

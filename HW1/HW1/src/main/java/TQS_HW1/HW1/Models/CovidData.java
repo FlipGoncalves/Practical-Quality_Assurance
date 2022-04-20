@@ -16,6 +16,10 @@ public class CovidData {
 
     private Date dateCreated = new Date(System.currentTimeMillis());
 
+    public CovidData(CovidDataRequestModel covid) {
+        this.country = covid.getCountry();
+    }
+
     public CovidData(String country) {
         this.country = country;
     }

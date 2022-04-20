@@ -64,7 +64,7 @@ class ServiceTest {
 
 
     @Test
-    public void testGetValidCovidDataCached() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testGetValidCovidDataCached() throws ParseException, IOException, APINotRespondsException, BadRequestException {
         when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
 
         CovidDataCountry found = service.getDataByCountry("Portugal", "2021-04-11");
@@ -74,7 +74,7 @@ class ServiceTest {
     }
 
     @Test
-    public void testGetValidAllCovidDataCached() throws IOException, ParseException {
+    void testGetValidAllCovidDataCached() throws IOException, ParseException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(cache.getAllData()).thenReturn(mock);
 
@@ -87,7 +87,7 @@ class ServiceTest {
     }
 
     @Test
-    public void testGetValidCovidData() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testGetValidCovidData() throws ParseException, IOException, APINotRespondsException, BadRequestException {
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
         when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(null);
 
@@ -98,10 +98,10 @@ class ServiceTest {
     }
 
     @Test
-    public void testGetValidAllCovidData() throws IOException, ParseException, APINotRespondsException, BadRequestException {
+    void testGetValidAllCovidData() throws IOException, ParseException, APINotRespondsException, BadRequestException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(covid_resolver.getOverallData()).thenReturn(mock);
-        when(cache.getAllData()).thenReturn(null);
+        when(cache.getAllData()).thenReturn(Arrays.asList());
 
         List<CovidData> found = service.getAllData();
 
@@ -112,14 +112,14 @@ class ServiceTest {
     }
 
     @Test
-    public void testGetCoviDataCountryError() throws IOException, APINotRespondsException, BadRequestException {
+    void testGetCoviDataCountryError() throws IOException, APINotRespondsException, BadRequestException {
         when(coviddata_resolver.getDataByCountry("asasdasfaasd", "2021-04-11")).thenThrow(IOException.class);
 
         assertThrows(IOException.class, () -> { service.getDataByCountry("asasdasfaasd", "2021-04-11"); }, "Country not found.");
     }
 
     @Test
-    public void testGetCoviDataDayError() throws IOException, APINotRespondsException, BadRequestException {
+    void testGetCoviDataDayError() throws IOException, APINotRespondsException, BadRequestException {
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-13-11")).thenThrow(IOException.class);
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-37")).thenThrow(IOException.class);
         when(coviddata_resolver.getDataByCountry("Portugal", "0-04-11")).thenThrow(IOException.class);
@@ -133,7 +133,7 @@ class ServiceTest {
 
 
     @Test
-    public void testAPINotAvailable() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testAPINotAvailable() throws ParseException, IOException, APINotRespondsException, BadRequestException {
 
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenThrow(BadRequest.class);
 

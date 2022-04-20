@@ -22,7 +22,7 @@ class HttpAPITest {
     }
 
     @Test
-    void testGetURL_Valid() throws IOException, APINotRespondsException {
+    void testGetURL_Valid() throws IOException, APINotRespondsException, InterruptedException {
         assertThat(httpClient.doHttpGet("http://amazon.com")).isNotEmpty();
     }
 

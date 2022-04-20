@@ -84,11 +84,11 @@ class CacheTest {
         assertEquals(this.coviddata.getContinent(), cahedData.getContinent());
         assertEquals(this.coviddata.getDay(), cahedData.getDay());
 
-        assertEquals(Cache.getHits(), 1);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 1);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(1, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(1, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(1)).findByCountryAndDay(anyString(), anyString());
     }
@@ -103,11 +103,11 @@ class CacheTest {
 
         assertNull(cahedData);
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 1);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(0, Cache.getHits());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(1, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(1)).findByCountryAndDay(anyString(), anyString());
     }
@@ -120,15 +120,15 @@ class CacheTest {
         List<CovidData> cahedData = cache.getAllData();
 
         assertFalse(cahedData.isEmpty());
-        assertEquals(cahedData.size(), 1);
+        assertEquals(1, cahedData.size());
 
         assertEquals(this.alldata.getCountry(), cahedData.get(0).getCountry());
 
-        assertEquals(Cache.getHits(), 1);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 1);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(1, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(1, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(alldata_rep, times(1)).findAll();
     }
@@ -140,13 +140,13 @@ class CacheTest {
 
         List<CovidData> cahedData = cache.getAllData();
 
-        assertNull(cahedData);
+        assertTrue(cahedData.isEmpty());
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 1);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(0, Cache.getHits());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(1, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(alldata_rep, times(1)).findAll();
     }
@@ -158,11 +158,11 @@ class CacheTest {
 
         assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
 
-        assertEquals(Cache.getHits(), 1);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(1, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(0, Cache.getGet_requests());
+        assertEquals(1, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(1)).saveAndFlush(this.coviddata);
     }
@@ -175,11 +175,11 @@ class CacheTest {
 
         assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(0, Cache.getHits());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(0, Cache.getGet_requests());
+        assertEquals(1, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(0)).saveAndFlush(this.coviddata);
 
@@ -192,11 +192,11 @@ class CacheTest {
 
         assertEquals(cache.saveData(Arrays.asList(this.alldata)), Arrays.asList(this.alldata));
 
-        assertEquals(Cache.getHits(), 1);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(1, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(0, Cache.getGet_requests());
+        assertEquals(1, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(alldata_rep, times(1)).saveAllAndFlush(Arrays.asList(this.alldata));
     }
@@ -208,11 +208,11 @@ class CacheTest {
 
         assertEquals(cache.saveData(Arrays.asList(this.alldata)), Arrays.asList(this.alldata));
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
+        assertEquals(0, Cache.getHits());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(0, Cache.getGet_requests());
+        assertEquals(1, Cache.getSave_requests());
+        assertEquals(0, Cache.getDelete_requests());
 
         verify(alldata_rep, times(0)).saveAllAndFlush(Arrays.asList(this.alldata));
 
@@ -233,11 +233,11 @@ class CacheTest {
 
         assertNull(cahedData);
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 1);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 1);
+        assertEquals(0, Cache.getHits());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(1, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(1, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(1)).findByCountryAndDay(anyString(), anyString());
         verify(coviddata_rep, times(1)).delete(this.coviddata);
@@ -260,11 +260,11 @@ class CacheTest {
 
         cache.deleteDatafromCache(this.coviddata);
 
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 0);
-        assertEquals(Cache.getDelete_requests(), 1);
+        assertEquals(0, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(0, Cache.getGet_requests());
+        assertEquals(0, Cache.getSave_requests());
+        assertEquals(1, Cache.getDelete_requests());
 
         verify(coviddata_rep, times(1)).delete(this.coviddata);
 

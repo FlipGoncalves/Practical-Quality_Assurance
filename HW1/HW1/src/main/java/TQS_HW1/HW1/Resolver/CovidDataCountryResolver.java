@@ -31,9 +31,11 @@ public class CovidDataCountryResolver {
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
             log.info("-- Successfull: {}", response);
+        } catch (InterruptedException e) {
+            log.info("-- Error: {}", e.toString());
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
-            System.err.println(e);
-            log.info("-- Error {}", e);
+            log.info("-- Error: {}", e.toString());
             throw new BadRequestException("Bad API Reuqest");
         }
 
@@ -46,6 +48,7 @@ public class CovidDataCountryResolver {
 
     public CovidDataCountry dataToJson(String data) {
         CovidDataCountry covid = new CovidDataCountry();
+        final String total = "total";
         try {
             JSONObject json = new JSONObject(data);
             JSONArray jsonArray = json.getJSONArray("response");
@@ -53,28 +56,23 @@ public class CovidDataCountryResolver {
             covid.setCountry(jsonArray.getJSONObject(0).getString("country"));
             covid.setContinent(jsonArray.getJSONObject(0).getString("continent"));
             covid.setDay(jsonArray.getJSONObject(0).getString("day"));
-            //System.out.println(jsonArray);
             JSONObject cases = jsonArray.getJSONObject(0).getJSONObject("cases");
-            //System.out.println(cases);
             covid.setNew_cases(cases.getString("new"));
             covid.setRecovered_cases(cases.getInt("recovered"));
-            covid.setTotal_cases(cases.getInt("total"));
+            covid.setTotal_cases(cases.getInt(total));
             covid.setCritical_cases(cases.getInt("critical"));
             covid.setActive_cases(cases.getInt("active"));
-
             JSONObject tests = jsonArray.getJSONObject(0).getJSONObject("tests");
-            //System.out.println(tests);
-            covid.setTotal_tests(tests.getInt("total"));
-
+            covid.setTotal_tests(tests.getInt(total));
             JSONObject deaths = jsonArray.getJSONObject(0).getJSONObject("deaths");
-            //System.out.println(deaths);
-            covid.setTotal_deaths(deaths.getInt("total"));
+            covid.setTotal_deaths(deaths.getInt(total));
             covid.setNew_deaths(deaths.getString("new"));
+
         } catch (TemplateInputException e) {
-            log.info("-- Error Tranforming data: {}", e);
+            log.info("-- Error Tranforming data: {}", e.toString());
             return null;
         } catch (JSONException e) {
-            log.info("-- Error Tranforming data: {}", e);
+            log.info("-- Error Tranforming data: {}", e.toString());
             throw new JSONException("JSON Exception");
         }
 
