@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
+import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidData;
 
@@ -25,18 +26,18 @@ public class CovidDataResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public List<CovidData> getOverallData() throws IOException, APINotRespondsException {
+    public List<CovidData> getOverallData() throws IOException, APINotRespondsException, BadRequestException {
         log.info("----- Start ----- Get data from the API");
 
         String response = null;
 
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/statistics");
-            log.info("-- Successfull");
-        } catch (JSONException e) {
+            log.info("-- Successfull: {}", response);
+        } catch (Exception e) {
             System.err.println(e);
             log.info("-- Error {}", e);
-            return null;
+            throw new BadRequestException("Bad API Reuqest");
         }
 
         log.info("-- Transform data into CovidData object");
@@ -50,13 +51,18 @@ public class CovidDataResolver {
     public List<CovidData> dataToJson(String data) {
         List<CovidData> result = new ArrayList<CovidData>();
 
-		JSONObject json = new JSONObject(data);
-		JSONArray jsonArray = json.getJSONArray("response");
-        for (int i = 0; i < jsonArray.length(); i++) {
-            CovidData covid = new CovidData(jsonArray.getJSONObject(i).getString("country"));
-            result.add(covid);
-        }
+        try {
+            JSONObject json = new JSONObject(data);
+            JSONArray jsonArray = json.getJSONArray("response");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                CovidData covid = new CovidData(jsonArray.getJSONObject(i).getString("country"));
+                result.add(covid);
+            }
 
-        return result;
+            return result;
+        } catch (JSONException e) {
+            log.info("-- Error Tranforming data: {}", e);
+            throw new JSONException("JSON Exception");
+        }
     }
 }

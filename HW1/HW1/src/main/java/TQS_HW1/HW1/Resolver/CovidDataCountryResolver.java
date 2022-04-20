@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.exceptions.TemplateInputException;
 
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
+import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 
@@ -23,17 +24,17 @@ public class CovidDataCountryResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, BadRequestException {
         String response = null;
         log.info("----- Start ----- Get data from the API");
 
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
-            log.info("-- Successfull");
-        } catch (JSONException e) {
+            log.info("-- Successfull: {}", response);
+        } catch (Exception e) {
             System.err.println(e);
             log.info("-- Error {}", e);
-            return null;
+            throw new BadRequestException("Bad API Reuqest");
         }
 
         log.info("-- Transform data into CovidDataCountry object");
@@ -72,7 +73,10 @@ public class CovidDataCountryResolver {
         } catch (TemplateInputException e) {
             log.info("-- Error Tranforming data: {}", e);
             return null;
-        } 
+        } catch (JSONException e) {
+            log.info("-- Error Tranforming data: {}", e);
+            throw new JSONException("JSON Exception");
+        }
 
         return covid;
     }

@@ -8,8 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Repository.CovidDataCountryRepository;
+import TQS_HW1.HW1.Repository.CovidDataRepository;
 
 import static org.mockito.Mockito.*;
 
@@ -23,9 +25,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CacheTest {
     CovidDataCountry coviddata;
+    CovidData alldata;
 
     @Mock
     CovidDataCountryRepository coviddata_rep;
+
+    @Mock
+    CovidDataRepository alldata_rep;
 
     @InjectMocks
     Cache cache = new Cache(600);
@@ -44,6 +50,9 @@ class CacheTest {
         this.coviddata.setCountry("Portugal");
         this.coviddata.setContinent("Europe");
         this.coviddata.setDay("2021-04-11");
+
+
+        this.alldata = new CovidData("Portugal");
     }
 
     @AfterEach
@@ -104,6 +113,114 @@ class CacheTest {
     }
 
     @Test
+    void testGetValidAllData() throws ParseException {
+        when(alldata_rep.findAll())
+                .thenReturn(Arrays.asList(this.alldata));
+
+        List<CovidData> cahedData = cache.getAllData();
+
+        assertFalse(cahedData.isEmpty());
+        assertEquals(cahedData.size(), 1);
+
+        assertEquals(this.alldata.getCountry(), cahedData.get(0).getCountry());
+
+        assertEquals(Cache.getHits(), 1);
+        assertEquals(Cache.getMisses(), 0);
+        assertEquals(Cache.getGet_requests(), 1);
+        assertEquals(Cache.getSave_requests(), 0);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(alldata_rep, times(1)).findAll();
+    }
+
+    @Test
+    void testGetInValidAllData() throws ParseException {
+        when(alldata_rep.findAll())
+                .thenReturn(Arrays.asList());
+
+        List<CovidData> cahedData = cache.getAllData();
+
+        assertNull(cahedData);
+
+        assertEquals(Cache.getHits(), 0);
+        assertEquals(Cache.getMisses(), 1);
+        assertEquals(Cache.getGet_requests(), 1);
+        assertEquals(Cache.getSave_requests(), 0);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(alldata_rep, times(1)).findAll();
+    }
+
+    @Test
+    void testSaveCacheData() {
+
+        when(coviddata_rep.saveAndFlush(this.coviddata)).thenReturn(this.coviddata);
+
+        assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
+
+        assertEquals(Cache.getHits(), 1);
+        assertEquals(Cache.getMisses(), 0);
+        assertEquals(Cache.getGet_requests(), 0);
+        assertEquals(Cache.getSave_requests(), 1);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(coviddata_rep, times(1)).saveAndFlush(this.coviddata);
+    }
+
+    @Test
+    void testSaveCacheDataExistent() {
+
+        when(coviddata_rep.findByCountryAndDay("Portugal", "2021-04-11"))
+                .thenReturn(Optional.ofNullable(this.coviddata));
+
+        assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
+
+        assertEquals(Cache.getHits(), 0);
+        assertEquals(Cache.getMisses(), 1);
+        assertEquals(Cache.getGet_requests(), 0);
+        assertEquals(Cache.getSave_requests(), 1);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(coviddata_rep, times(0)).saveAndFlush(this.coviddata);
+
+    }
+
+    @Test
+    void testSaveCacheAllData() {
+
+        when(alldata_rep.saveAllAndFlush(Arrays.asList(this.alldata))).thenReturn(Arrays.asList(this.alldata));
+
+        assertEquals(cache.saveData(Arrays.asList(this.alldata)), Arrays.asList(this.alldata));
+
+        assertEquals(Cache.getHits(), 1);
+        assertEquals(Cache.getMisses(), 0);
+        assertEquals(Cache.getGet_requests(), 0);
+        assertEquals(Cache.getSave_requests(), 1);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(alldata_rep, times(1)).saveAllAndFlush(Arrays.asList(this.alldata));
+    }
+
+    @Test
+    void testSaveCacheAllDataExistent() {
+
+        when(alldata_rep.findAll()).thenReturn(Arrays.asList(this.alldata));
+
+        assertEquals(cache.saveData(Arrays.asList(this.alldata)), Arrays.asList(this.alldata));
+
+        assertEquals(Cache.getHits(), 0);
+        assertEquals(Cache.getMisses(), 1);
+        assertEquals(Cache.getGet_requests(), 0);
+        assertEquals(Cache.getSave_requests(), 1);
+        assertEquals(Cache.getDelete_requests(), 0);
+
+        verify(alldata_rep, times(0)).saveAllAndFlush(Arrays.asList(this.alldata));
+
+    }
+
+
+    // same code for CovidDataCountry and CovidData
+    @Test
     void testGetExpiredCacheData() throws ParseException {
 
         Date date = new Date(System.currentTimeMillis() - 605 * 1000); // A date with more that 600 sec
@@ -150,40 +267,6 @@ class CacheTest {
         assertEquals(Cache.getDelete_requests(), 1);
 
         verify(coviddata_rep, times(1)).delete(this.coviddata);
-
-    }
-
-    @Test
-    void testSaveCacheData() {
-
-        when(coviddata_rep.saveAndFlush(this.coviddata)).thenReturn(this.coviddata);
-
-        assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
-
-        assertEquals(Cache.getHits(), 1);
-        assertEquals(Cache.getMisses(), 0);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
-
-        verify(coviddata_rep, times(1)).saveAndFlush(this.coviddata);
-    }
-
-    @Test
-    void testSaveCacheDataExistent() {
-
-        when(coviddata_rep.findByCountryAndDay("Portugal", "2021-04-11"))
-                .thenReturn(Optional.ofNullable(this.coviddata));
-
-        assertEquals(cache.saveDataCountry(this.coviddata), this.coviddata);
-
-        assertEquals(Cache.getHits(), 0);
-        assertEquals(Cache.getMisses(), 1);
-        assertEquals(Cache.getGet_requests(), 0);
-        assertEquals(Cache.getSave_requests(), 1);
-        assertEquals(Cache.getDelete_requests(), 0);
-
-        verify(coviddata_rep, times(0)).saveAndFlush(this.coviddata);
 
     }
 }

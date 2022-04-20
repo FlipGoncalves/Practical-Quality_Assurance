@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import TQS_HW1.HW1.Cache.Cache;
-import TQS_HW1.HW1.Cache.CacheAllData;
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
+import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -32,10 +32,7 @@ public class CovidDataCountryService {
     @Autowired
     Cache cache;
 
-    @Autowired
-    CacheAllData cacheall;
-
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException, APINotRespondsException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException, APINotRespondsException, BadRequestException {
         log.info("Getting Cached Data");
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
@@ -60,7 +57,7 @@ public class CovidDataCountryService {
 
     public List<CovidData> getAllData() throws ParseException {
         log.info("Getting All Cached Data");
-        List<CovidData> cachedData = cacheall.getAllData();
+        List<CovidData> cachedData = cache.getAllData();
         List<CovidData> result = null;
 
         if (cachedData == null) {
@@ -74,7 +71,7 @@ public class CovidDataCountryService {
             }
 
             log.info("Saving Data into cache");  
-            cacheall.saveData(result);
+            cache.saveData(result);
             return result;
         }
 
