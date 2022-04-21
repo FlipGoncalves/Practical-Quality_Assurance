@@ -2,6 +2,8 @@ package TQS_HW1.HW1.Controller;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,6 +14,8 @@ import TQS_HW1.HW1.Hw1Application;
 import TQS_HW1.HW1.Cache.Cache;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Repository.CovidDataCountryRepository;
+import TQS_HW1.HW1.Resolver.CovidDataResolver;
+import TQS_HW1.HW1.Services.CovidDataCountryService;
 
 import org.springframework.http.MediaType;
 
@@ -32,11 +36,20 @@ class APIControllerCovidDataCountryIT {
     @Autowired
     private CovidDataCountryRepository rep;
 
+    @Mock
+    private CovidDataResolver resolver;
+
+    @Mock
+    private Cache cache;
+
+    @InjectMocks
+    private CovidDataCountryService service;
+
     @AfterEach
     void resetDb() {
         rep.deleteAll();
     }
-
+    
     @Test
     void testGetCountryData() throws Exception {
         CovidDataCountry data = createTestCountry();
@@ -249,6 +262,8 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
+
+    
 
     private CovidDataCountry createTestCountry() {
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");

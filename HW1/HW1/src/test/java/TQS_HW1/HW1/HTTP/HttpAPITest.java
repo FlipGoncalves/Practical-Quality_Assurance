@@ -22,6 +22,14 @@ class HttpAPITest {
     }
 
     @Test
+    void testGetUrl_Interrupts() {
+        Thread.currentThread().interrupt();
+        assertThrows(NullPointerException.class, () -> {
+            httpClient.doHttpGet("http://amazon.com");
+        });
+    }
+
+    @Test
     void testGetURL_Valid() throws IOException, APINotRespondsException, InterruptedException {
         assertThat(httpClient.doHttpGet("http://amazon.com")).isNotEmpty();
     }

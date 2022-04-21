@@ -16,10 +16,6 @@ public class CovidData {
 
     private Date dateCreated = new Date(System.currentTimeMillis());
 
-    public CovidData(CovidDataRequestModel covid) {
-        this.country = covid.getCountry();
-    }
-
     public CovidData(String country) {
         this.country = country;
     }
@@ -31,20 +27,11 @@ public class CovidData {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    @Override
-    public String toString() {
-        return "CovidData [country=" + country + ", id=" + id + "]";
-    }
-
     public Date getObjectCreated() {
         return dateCreated;
     }
 
-    public void setObjectCreated(Date objectcreated) {
-        this.dateCreated = objectcreated;
+    public void setObjectCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

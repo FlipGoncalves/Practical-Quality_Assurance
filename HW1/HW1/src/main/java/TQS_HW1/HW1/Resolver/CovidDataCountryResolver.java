@@ -7,10 +7,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.exceptions.TemplateInputException;
 
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
-import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 
@@ -24,19 +22,21 @@ public class CovidDataCountryResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, BadRequestException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, InterruptedException {
         String response = null;
         log.info("----- Start ----- Get data from the API");
 
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/history?country="+country+"&day="+date);
             log.info("-- Successfull: {}", response);
-        } catch (InterruptedException e) {
+        } catch (NullPointerException e) {
             log.info("-- Error: {}", e.toString());
             Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            log.info("-- Error: {}", e.toString());
-            throw new BadRequestException("Bad API Reuqest");
+            throw new NullPointerException();
+        } catch (InterruptedException e) {
+            log.info("-- Error {}", e.toString());
+            Thread.currentThread().interrupt();
+            throw new InterruptedException();
         }
 
         log.info("-- Transform data into CovidDataCountry object");
@@ -68,9 +68,6 @@ public class CovidDataCountryResolver {
             covid.setTotalDeaths(deaths.getInt(total));
             covid.setNewDeaths(deaths.getString("new"));
 
-        } catch (TemplateInputException e) {
-            log.info("-- Error Tranforming data: {}", e.toString());
-            return null;
         } catch (JSONException e) {
             log.info("-- Error Tranforming data: {}", e.toString());
             throw new JSONException("JSON Exception");

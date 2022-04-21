@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
-import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataRequestModel;
 import TQS_HW1.HW1.Models.CovidDataCountry;
@@ -41,7 +40,7 @@ public class ViewController {
 	}
 
 	@PostMapping("/home")
-	public String submitHome(@ModelAttribute("covidCountry") CovidDataRequestModel country2, Model model) throws ParseException, IOException, APINotRespondsException, BadRequestException {
+	public String submitHome(@ModelAttribute("covidCountry") CovidDataRequestModel country2, Model model) throws ParseException, IOException, APINotRespondsException, InterruptedException {
 		log.info("-- Start -- Get data for home template");
 		// date
 		String date;
@@ -60,7 +59,7 @@ public class ViewController {
 			date += day;
 		}
 
-		CovidData country = new CovidData(country2);
+		CovidData country = new CovidData(country2.getCountry());
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 
@@ -101,7 +100,7 @@ public class ViewController {
 	}
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model) throws InterruptedException {
 		log.info("Get index template");
 		model.addAttribute("Country", service.getAllData());
 		return "index";

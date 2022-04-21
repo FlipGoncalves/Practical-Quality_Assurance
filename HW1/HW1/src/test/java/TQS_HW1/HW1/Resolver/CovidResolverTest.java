@@ -64,9 +64,21 @@ class CovidResolverTest {
     @Test
     void testGetInValidData() throws APINotRespondsException, IOException, URISyntaxException, ParseException, BadRequestException, InterruptedException {
         when(httpAPI.doHttpGet("https://covid-193.p.rapidapi.com/history?country=Portugal&day=2021-04-16"))
-                .thenReturn("");
+                .thenThrow(InterruptedException.class);
 
-        assertThrows(JSONException.class, () -> {
+        assertThrows(InterruptedException.class, () -> {
+            covid_resolver.getDataByCountry("Portugal", "2021-04-16");
+        });
+
+        verify(httpAPI, times(1)).doHttpGet(anyString());
+    }
+
+    @Test
+    void testGetBadRequest() throws APINotRespondsException, IOException, URISyntaxException, ParseException, BadRequestException, InterruptedException {
+        when(httpAPI.doHttpGet("https://covid-193.p.rapidapi.com/history?country=Portugal&day=2021-04-16"))
+                .thenThrow(NullPointerException.class);
+
+        assertThrows(NullPointerException.class, () -> {
             covid_resolver.getDataByCountry("Portugal", "2021-04-16");
         });
 
@@ -99,9 +111,21 @@ class CovidResolverTest {
     @Test
     void testGetInValidAllData() throws APINotRespondsException, IOException, URISyntaxException, ParseException, BadRequestException, InterruptedException {
         when(httpAPI.doHttpGet("https://covid-193.p.rapidapi.com/statistics"))
-                .thenReturn("");
+                .thenThrow(InterruptedException.class);
 
-        assertThrows(JSONException.class, () -> {
+        assertThrows(InterruptedException.class, () -> {
+            data_resolver.getOverallData();
+        });
+
+        verify(httpAPI, times(1)).doHttpGet(anyString());
+    }
+
+    @Test
+    void testGetBadRequestAllData() throws APINotRespondsException, IOException, URISyntaxException, ParseException, BadRequestException, InterruptedException {
+        when(httpAPI.doHttpGet("https://covid-193.p.rapidapi.com/statistics"))
+                .thenThrow(NullPointerException.class);
+
+        assertThrows(NullPointerException.class, () -> {
             data_resolver.getOverallData();
         });
 

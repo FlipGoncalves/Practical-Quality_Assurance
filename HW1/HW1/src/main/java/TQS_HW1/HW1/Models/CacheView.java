@@ -20,41 +20,19 @@ public class CacheView {
         return hits;
     }
 
-    public void setHits(int hits) {
-        this.hits = hits;
-    }
-
     public int getMisses() {
         return misses;
-    }
-
-    public void setMisses(int misses) {
-        this.misses = misses;
     }
 
     public int getgetRequests() {
         return getRequests;
     }
 
-    public void setgetRequests(int getRequests) {
-        this.getRequests = getRequests;
-    }
-
     public int getsaveRequests() {
         return saveRequests;
-    }
-
-    public void setsaveRequests(int saveRequests) {
-        this.saveRequests = saveRequests;
     }
 
     public int getdeleteRequests() {
         return deleteRequests;
     }
-
-    public void setdeleteRequests(int deleteRequests) {
-        this.deleteRequests = deleteRequests;
-    }
-
-    
 }

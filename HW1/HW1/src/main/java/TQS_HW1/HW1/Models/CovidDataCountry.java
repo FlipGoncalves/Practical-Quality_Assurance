@@ -134,12 +134,4 @@ public class CovidDataCountry {
     public void setObjectCreated(Date objectCreated) {
         this.objectCreated = objectCreated;
     }
-
-    @Override
-    public String toString() {
-        return "CovidDataCountry [activeCases=" + activeCases + ", continent=" + continent + ", country=" + country
-                + ", criticalCases=" + criticalCases + ", day=" + day + ", id=" + id + ", newCases=" + newCases
-                + ", newDeaths=" + newDeaths + ", objectCreated=" + objectCreated + ", recoveredCases=" + recoveredCases
-                + ", totalCases=" + totalCases + ", totalDeaths=" + totalDeaths + ", totalTests=" + totalTests + "]";
-    }
 }

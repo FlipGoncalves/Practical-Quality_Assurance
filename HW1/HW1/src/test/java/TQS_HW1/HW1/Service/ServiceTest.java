@@ -63,7 +63,7 @@ class ServiceTest {
 
 
     @Test
-    void testGetValidCovidDataCached() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testGetValidCovidDataCached() throws ParseException, IOException, APINotRespondsException, BadRequestException, InterruptedException {
         when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
 
         CovidDataCountry found = service.getDataByCountry("Portugal", "2021-04-11");
@@ -73,7 +73,7 @@ class ServiceTest {
     }
 
     @Test
-    void testGetValidAllCovidDataCached() throws IOException, ParseException {
+    void testGetValidAllCovidDataCached() throws IOException, ParseException, InterruptedException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(cache.getAllData()).thenReturn(mock);
 
@@ -86,7 +86,7 @@ class ServiceTest {
     }
 
     @Test
-    void testGetValidCovidData() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testGetValidCovidData() throws ParseException, IOException, APINotRespondsException, BadRequestException, InterruptedException {
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenReturn(this.coviddata);
         when(cache.getDataByCountry("Portugal", "2021-04-11")).thenReturn(null);
 
@@ -97,7 +97,7 @@ class ServiceTest {
     }
 
     @Test
-    void testGetValidAllCovidData() throws IOException, ParseException, APINotRespondsException, BadRequestException {
+    void testGetValidAllCovidData() throws IOException, ParseException, APINotRespondsException, BadRequestException, InterruptedException {
         List<CovidData> mock = Arrays.asList(new CovidData[]{new CovidData("Portugal")});
         when(covid_resolver.getOverallData()).thenReturn(mock);
         when(cache.getAllData()).thenReturn(Arrays.asList());
@@ -111,14 +111,14 @@ class ServiceTest {
     }
 
     @Test
-    void testGetCoviDataCountryError() throws IOException, APINotRespondsException, BadRequestException {
+    void testGetCoviDataCountryError() throws IOException, APINotRespondsException, BadRequestException, InterruptedException {
         when(coviddata_resolver.getDataByCountry("asasdasfaasd", "2021-04-11")).thenThrow(IOException.class);
 
         assertThrows(IOException.class, () -> { service.getDataByCountry("asasdasfaasd", "2021-04-11"); }, "Country not found.");
     }
 
     @Test
-    void testGetCoviDataDayError() throws IOException, APINotRespondsException, BadRequestException {
+    void testGetCoviDataDayError() throws IOException, APINotRespondsException, BadRequestException, InterruptedException {
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-13-11")).thenThrow(IOException.class);
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-37")).thenThrow(IOException.class);
         when(coviddata_resolver.getDataByCountry("Portugal", "0-04-11")).thenThrow(IOException.class);
@@ -130,12 +130,31 @@ class ServiceTest {
         assertThrows(IOException.class, () -> { service.getDataByCountry("Portugal", "2022-12-12"); }, "Date not found.");
     }
 
-
     @Test
-    void testAPINotAvailable() throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    void testAPINotAvailable() throws ParseException, IOException, APINotRespondsException, BadRequestException, InterruptedException {
 
         when(coviddata_resolver.getDataByCountry("Portugal", "2021-04-11")).thenThrow(BadRequest.class);
 
         assertThrows(BadRequest.class, () -> { service.getDataByCountry("Portugal", "2021-04-11"); }, "All services unavailable.");
+    }
+
+    @Test
+    void testGetValidAllCovidData_Interrupted() throws IOException, ParseException, APINotRespondsException, BadRequestException, InterruptedException {
+        Thread.currentThread().interrupt();
+        when(covid_resolver.getOverallData()).thenThrow(InterruptedException.class);
+
+        assertThrows(InterruptedException.class, () -> { service.getAllData(); });
+    }
+
+    @Test
+    void testGetValidAllCovidData_Error() throws IOException, ParseException, APINotRespondsException, BadRequestException, InterruptedException {
+        when(covid_resolver.getOverallData()).thenThrow(NullPointerException.class);
+        when(cache.getAllData()).thenReturn(Arrays.asList());
+
+        List<CovidData> found = service.getAllData();
+
+        assertTrue(found.isEmpty());
+
+        verify(covid_resolver, times(1)).getOverallData();
     }
 }

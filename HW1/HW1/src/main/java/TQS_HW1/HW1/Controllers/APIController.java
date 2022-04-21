@@ -39,18 +39,16 @@ public class APIController {
     private CovidDataCountryRepository repositoryCountry;
     
     @GetMapping("/all_data")
-    public ResponseEntity<List<CovidData>> getData(@RequestParam(value = "data", required = false) String data) throws BadRequestException {
+    public ResponseEntity<List<CovidData>> getData() throws InterruptedException {
         log.info("GET Request -> All Covid Data");
         List<CovidData> covid = service.getAllData();
-        if (covid.isEmpty()) {
-            throw new BadRequestException("Get All Data ERROR");
-        }
+
         repositoryData.saveAll(covid);
         return new ResponseEntity<>(covid, HttpStatus.OK);
     }
 
     @GetMapping("/get_data")
-    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws IOException, BadRequestException, APINotRespondsException {
+    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws IOException, BadRequestException, APINotRespondsException, InterruptedException {
         log.info("GET Request -> Covid Data by country: {}, and date: {}", country, date);
 
         CovidDataCountry data = service.getDataByCountry(country, date);

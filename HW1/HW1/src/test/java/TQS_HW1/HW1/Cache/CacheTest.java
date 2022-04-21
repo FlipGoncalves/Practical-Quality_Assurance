@@ -218,8 +218,36 @@ class CacheTest {
 
     }
 
+    @Test
+    void testDeleteCacheData() {
 
-    // same code for CovidDataCountry and CovidData
+        cache.deleteDatafromCache(this.coviddata);
+
+        assertEquals(0, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(0, Cache.getgetRequests());
+        assertEquals(0, Cache.getsaveRequests());
+        assertEquals(1, Cache.getdeleteRequests());
+
+        verify(coviddata_rep, times(1)).delete(this.coviddata);
+
+    }
+
+    @Test
+    void testDeleteCacheAllData() {
+
+        cache.deleteDatafromCache(Arrays.asList(this.alldata));
+
+        assertEquals(0, Cache.getHits());
+        assertEquals(0, Cache.getMisses());
+        assertEquals(0, Cache.getgetRequests());
+        assertEquals(0, Cache.getsaveRequests());
+        assertEquals(1, Cache.getdeleteRequests());
+
+        verify(alldata_rep, times(1)).deleteAll(Arrays.asList(this.alldata));
+
+    }
+
     @Test
     void testGetExpiredCacheData() throws ParseException {
 
@@ -255,18 +283,40 @@ class CacheTest {
         assertTrue(cache.hasExpiredCountry(this.coviddata));
     }
 
-    @Test
-    void testDeleteCacheData() {
 
-        cache.deleteDatafromCache(this.coviddata);
+
+    @Test
+    void testGetExpiredCacheAllData() throws ParseException {
+
+        Date date = new Date(System.currentTimeMillis() - 605 * 1000); // A date with more that 600 sec
+        this.alldata.setObjectCreated(date);
+
+        when(alldata_rep.findAll())
+                .thenReturn(Arrays.asList(this.alldata));
+
+        List<CovidData> cahedData = cache.getAllData();
+
+        assertTrue(cahedData.isEmpty());
 
         assertEquals(0, Cache.getHits());
-        assertEquals(0, Cache.getMisses());
-        assertEquals(0, Cache.getgetRequests());
+        assertEquals(1, Cache.getMisses());
+        assertEquals(1, Cache.getgetRequests());
         assertEquals(0, Cache.getsaveRequests());
         assertEquals(1, Cache.getdeleteRequests());
 
-        verify(coviddata_rep, times(1)).delete(this.coviddata);
+        verify(alldata_rep, times(1)).findAll();
+        verify(alldata_rep, times(1)).deleteAll(Arrays.asList(this.alldata));
+    }
 
+    @Test
+    void testHasExpiredValidCacheAllData() throws ParseException {
+        assertFalse(cache.hasExpiredCountry(Arrays.asList(this.alldata)));
+    }
+
+    @Test
+    void testHasExpiredInvalidCacheAllData() throws ParseException {
+        Date date = new Date(System.currentTimeMillis() - 605 * 1000); // A date with more that 600 sec
+        this.alldata.setObjectCreated(date);
+        assertTrue(cache.hasExpiredCountry(Arrays.asList(this.alldata)));
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
-import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.HTTP.HttpAPI;
 import TQS_HW1.HW1.Models.CovidData;
 
@@ -26,20 +25,23 @@ public class CovidDataResolver {
     @Autowired
     HttpAPI httpClient;
 
-    public List<CovidData> getOverallData() throws IOException, APINotRespondsException, BadRequestException {
+    public List<CovidData> getOverallData() throws IOException, APINotRespondsException, InterruptedException {
         log.info("----- Start ----- Get data from the API");
 
         String response = null;
+        final String error = "-- Error";
 
         try {
             response = this.httpClient.doHttpGet("https://covid-193.p.rapidapi.com/statistics");
             log.info("-- Successfull: {}", response);
-        } catch (InterruptedException e) {
-            log.info("-- Error {}", e.toString());
+        } catch (NullPointerException e) {
+            logError(error, e.toString());
             Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            log.info("-- Error {}", e.toString());
-            throw new BadRequestException("Bad API Reuqest");
+            throw new NullPointerException();
+        } catch (InterruptedException e) {
+            logError(error, e.toString());
+            Thread.currentThread().interrupt();
+            throw new InterruptedException();
         }
 
         log.info("-- Transform data into CovidData object");
@@ -66,5 +68,9 @@ public class CovidDataResolver {
             log.info("-- Error Tranforming data: {}", e.toString());
             throw new JSONException("JSON Exception");
         }
+    }
+
+    private void logError(String error, String e) {
+        log.info("{} {}", error, e);
     }
 }

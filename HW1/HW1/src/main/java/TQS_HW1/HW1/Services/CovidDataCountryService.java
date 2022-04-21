@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import TQS_HW1.HW1.Cache.Cache;
 import TQS_HW1.HW1.Exceptions.APINotRespondsException;
-import TQS_HW1.HW1.Exceptions.BadRequestException;
 import TQS_HW1.HW1.Models.CovidData;
 import TQS_HW1.HW1.Models.CovidDataCountry;
 import TQS_HW1.HW1.Resolver.CovidDataCountryResolver;
@@ -32,7 +31,7 @@ public class CovidDataCountryService {
     @Autowired
     Cache cache;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, BadRequestException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, InterruptedException {
         log.info("Getting Cached Data");
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
@@ -54,7 +53,7 @@ public class CovidDataCountryService {
         return cachedData;
     }
 
-    public List<CovidData> getAllData() {
+    public List<CovidData> getAllData() throws InterruptedException {
         log.info("Getting All Cached Data");
         List<CovidData> cachedData = cache.getAllData();
         List<CovidData> result = null;
@@ -63,6 +62,10 @@ public class CovidDataCountryService {
             try {
                 log.info("Getting All Data from the API");  
                 result = resolverAll.getOverallData();
+            } catch (InterruptedException e) {
+                log.info("-- Error {}", e.toString());
+                Thread.currentThread().interrupt();
+                throw new InterruptedException();
             } catch (Exception e) {
                 log.info("Error {}", e.toString());
                 return Arrays.asList();
