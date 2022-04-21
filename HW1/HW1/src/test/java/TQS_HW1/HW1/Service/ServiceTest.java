@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
@@ -49,14 +48,14 @@ class ServiceTest {
     @BeforeEach
     void setUp() {
         this.coviddata = new CovidDataCountry();
-        this.coviddata.setActive_cases(200);
-        this.coviddata.setCritical_cases(5);
-        this.coviddata.setNew_cases("+45");
-        this.coviddata.setRecovered_cases(56);
-        this.coviddata.setTotal_cases(5600);
-        this.coviddata.setTotal_tests(4550000);
-        this.coviddata.setNew_deaths("+6");
-        this.coviddata.setTotal_deaths(45);
+        this.coviddata.setActiveCases(200);
+        this.coviddata.setCriticalCases(5);
+        this.coviddata.setNewCases("+45");
+        this.coviddata.setRecoveredCases(56);
+        this.coviddata.setTotalCases(5600);
+        this.coviddata.setTotalTests(4550000);
+        this.coviddata.setNewDeaths("+6");
+        this.coviddata.setTotalDeaths(45);
         this.coviddata.setCountry("Portugal");
         this.coviddata.setContinent("Europe");
         this.coviddata.setDay("2021-04-11");
@@ -81,7 +80,7 @@ class ServiceTest {
         List<CovidData> found = service.getAllData();
 
         assertNotNull(found);
-        assertThat(found.size()).isGreaterThan(0);
+        assertFalse(found.isEmpty());
 
         verify(cache, times(1)).getAllData();
     }
@@ -106,7 +105,7 @@ class ServiceTest {
         List<CovidData> found = service.getAllData();
 
         assertNotNull(found);
-        assertThat(found.size()).isGreaterThan(0);
+        assertFalse(found.isEmpty());
 
         verify(covid_resolver, times(1)).getOverallData();
     }

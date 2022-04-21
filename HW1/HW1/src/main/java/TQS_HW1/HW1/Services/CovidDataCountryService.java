@@ -1,7 +1,6 @@
 package TQS_HW1.HW1.Services;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,12 +27,12 @@ public class CovidDataCountryService {
     CovidDataCountryResolver resolver;
 
     @Autowired
-    CovidDataResolver resolver_all;
+    CovidDataResolver resolverAll;
 
     @Autowired
     Cache cache;
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException, IOException, APINotRespondsException, BadRequestException {
+    public CovidDataCountry getDataByCountry(String country, String date) throws IOException, APINotRespondsException, BadRequestException {
         log.info("Getting Cached Data");
         CovidDataCountry cachedData = cache.getDataByCountry(country, date);
         CovidDataCountry result = null;
@@ -55,7 +54,7 @@ public class CovidDataCountryService {
         return cachedData;
     }
 
-    public List<CovidData> getAllData() throws ParseException {
+    public List<CovidData> getAllData() {
         log.info("Getting All Cached Data");
         List<CovidData> cachedData = cache.getAllData();
         List<CovidData> result = null;
@@ -63,7 +62,7 @@ public class CovidDataCountryService {
         if (cachedData.isEmpty()) {
             try {
                 log.info("Getting All Data from the API");  
-                result = resolver_all.getOverallData();
+                result = resolverAll.getOverallData();
             } catch (Exception e) {
                 log.info("Error {}", e.toString());
                 return Arrays.asList();

@@ -64,15 +64,15 @@ public class ViewController {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 
-		Date Date_date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		Date dateDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(Date_date);
+		calendar.setTime(dateDate);
 
-		List<CovidDataCountry> covid_data = new ArrayList<>();
+		List<CovidDataCountry> coviddata = new ArrayList<>();
 
 		log.info("Get data for country {}", country.getCountry());
 		for (int i = 0; i < 5; i++) {
-			String strDate = dateFormat.format(Date_date);
+			String strDate = dateFormat.format(dateDate);
 			log.info("Get data for day {}", strDate);
 
 			CovidDataCountry data = service.getDataByCountry(country.getCountry(), strDate);
@@ -81,27 +81,27 @@ public class ViewController {
 				CovidDataCountry covid = new CovidDataCountry();
 				covid.setDay(strDate);
 				covid.setCountry(country.getCountry());
-				covid.setNew_cases("0");
-				covid.setNew_deaths("0");
-				covid_data.add(covid);
+				covid.setNewCases("0");
+				covid.setNewDeaths("0");
+				coviddata.add(covid);
 			} else {
-				covid_data.add(data);
+				coviddata.add(data);
 			}
 
 			calendar.add(Calendar.DATE, -1);
-			Date_date = calendar.getTime();
+			dateDate = calendar.getTime();
 		}
 
-		log.info("Data for country {}: {}", country.getCountry(), covid_data);
+		log.info("Data for country {}: {}", country.getCountry(), coviddata);
 
-		model.addAttribute("Country", covid_data);
+		model.addAttribute("Country", coviddata);
 
 		log.info("-- End -- Get data for home template");
 		return "home";
 	}
 
 	@GetMapping("/")
-	public String index(Model model) throws ParseException {
+	public String index(Model model) {
 		log.info("Get index template");
 		model.addAttribute("Country", service.getAllData());
 		return "index";

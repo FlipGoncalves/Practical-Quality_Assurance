@@ -1,6 +1,7 @@
 package TQS_HW1.HW1.Repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class CovidDataRepositoryTest {
         Optional<CovidData> data_get = covid_country_rep.findByCountry("Portugal");
 
         assertThat(data_get).isNotNull();
-        assertThat(data_get.get()).isEqualTo(data);
+        assertEquals(data, data_get.get());
     }
 
     // equals to bad argument -> it doesnt find any

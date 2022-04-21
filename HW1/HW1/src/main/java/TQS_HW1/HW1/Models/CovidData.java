@@ -40,11 +40,11 @@ public class CovidData {
         return "CovidData [country=" + country + ", id=" + id + "]";
     }
 
-    public Date getObject_created() {
+    public Date getObjectCreated() {
         return dateCreated;
     }
 
-    public void setObject_created(Date object_created) {
-        this.dateCreated = object_created;
+    public void setObjectCreated(Date objectcreated) {
+        this.dateCreated = objectcreated;
     }
 }

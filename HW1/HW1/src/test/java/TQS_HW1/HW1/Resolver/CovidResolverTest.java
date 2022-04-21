@@ -45,14 +45,14 @@ class CovidResolverTest {
 
         CovidDataCountry result = covid_resolver.getDataByCountry("Portugal", "2021-04-16");
 
-        assertEquals(25367, result.getActive_cases());
-        assertEquals(101, result.getCritical_cases());
-        assertEquals(829911, result.getTotal_cases());
-        assertEquals("+553", result.getNew_cases());
-        assertEquals(787607, result.getRecovered_cases());
-        assertEquals("+4", result.getNew_deaths());
-        assertEquals(16937, result.getTotal_deaths());
-        assertEquals(9645758, result.getTotal_tests());
+        assertEquals(25367, result.getActiveCases());
+        assertEquals(101, result.getCriticalCases());
+        assertEquals(829911, result.getTotalCases());
+        assertEquals("+553", result.getNewCases());
+        assertEquals(787607, result.getRecoveredCases());
+        assertEquals("+4", result.getNewDeaths());
+        assertEquals(16937, result.getTotalDeaths());
+        assertEquals(9645758, result.getTotalTests());
 
         assertEquals("Europe", result.getContinent());
         assertEquals("Portugal", result.getCountry());

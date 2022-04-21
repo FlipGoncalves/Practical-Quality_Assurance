@@ -57,16 +57,16 @@ public class CovidDataCountryResolver {
             covid.setContinent(jsonArray.getJSONObject(0).getString("continent"));
             covid.setDay(jsonArray.getJSONObject(0).getString("day"));
             JSONObject cases = jsonArray.getJSONObject(0).getJSONObject("cases");
-            covid.setNew_cases(cases.getString("new"));
-            covid.setRecovered_cases(cases.getInt("recovered"));
-            covid.setTotal_cases(cases.getInt(total));
-            covid.setCritical_cases(cases.getInt("critical"));
-            covid.setActive_cases(cases.getInt("active"));
+            covid.setNewCases(cases.getString("new"));
+            covid.setRecoveredCases(cases.getInt("recovered"));
+            covid.setTotalCases(cases.getInt(total));
+            covid.setCriticalCases(cases.getInt("critical"));
+            covid.setActiveCases(cases.getInt("active"));
             JSONObject tests = jsonArray.getJSONObject(0).getJSONObject("tests");
-            covid.setTotal_tests(tests.getInt(total));
+            covid.setTotalTests(tests.getInt(total));
             JSONObject deaths = jsonArray.getJSONObject(0).getJSONObject("deaths");
-            covid.setTotal_deaths(deaths.getInt(total));
-            covid.setNew_deaths(deaths.getString("new"));
+            covid.setTotalDeaths(deaths.getInt(total));
+            covid.setNewDeaths(deaths.getString("new"));
 
         } catch (TemplateInputException e) {
             log.info("-- Error Tranforming data: {}", e.toString());

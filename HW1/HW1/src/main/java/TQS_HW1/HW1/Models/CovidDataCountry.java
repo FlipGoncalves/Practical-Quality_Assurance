@@ -16,16 +16,16 @@ public class CovidDataCountry {
     private String continent;
     private String day;
 
-    private String new_cases;
-    private int recovered_cases;
-    private int total_cases;
-    private int critical_cases;
-    private int active_cases;
-    private int total_tests;
-    private String new_deaths;
-    private int total_deaths;
+    private String newCases;
+    private int recoveredCases;
+    private int totalCases;
+    private int criticalCases;
+    private int activeCases;
+    private int totalTests;
+    private String newDeaths;
+    private int totalDeaths;
 
-    private Date object_created = new Date(System.currentTimeMillis());
+    private Date objectCreated = new Date(System.currentTimeMillis());
 
     public CovidDataCountry(String country, String continent, String day) {
         this.country = country;
@@ -63,75 +63,83 @@ public class CovidDataCountry {
         return day;
     }
 
-    public String getNew_cases() {
-        return new_cases;
+    public String getNewCases() {
+        return newCases;
     }
 
-    public void setNew_cases(String new_cases) {
-        this.new_cases = new_cases;
+    public void setNewCases(String newCases) {
+        this.newCases = newCases;
     }
 
-    public int getRecovered_cases() {
-        return recovered_cases;
+    public int getRecoveredCases() {
+        return recoveredCases;
     }
 
-    public void setRecovered_cases(int recovered_cases) {
-        this.recovered_cases = recovered_cases;
+    public void setRecoveredCases(int recoveredCases) {
+        this.recoveredCases = recoveredCases;
     }
 
-    public int getTotal_cases() {
-        return total_cases;
+    public int getTotalCases() {
+        return totalCases;
     }
 
-    public void setTotal_cases(int total_cases) {
-        this.total_cases = total_cases;
+    public void setTotalCases(int totalCases) {
+        this.totalCases = totalCases;
     }
 
-    public int getCritical_cases() {
-        return critical_cases;
+    public int getCriticalCases() {
+        return criticalCases;
     }
 
-    public void setCritical_cases(int critical_cases) {
-        this.critical_cases = critical_cases;
+    public void setCriticalCases(int criticalCases) {
+        this.criticalCases = criticalCases;
     }
 
-    public int getActive_cases() {
-        return active_cases;
+    public int getActiveCases() {
+        return activeCases;
     }
 
-    public void setActive_cases(int active_cases) {
-        this.active_cases = active_cases;
+    public void setActiveCases(int activeCases) {
+        this.activeCases = activeCases;
     }
 
-    public int getTotal_tests() {
-        return total_tests;
+    public int getTotalTests() {
+        return totalTests;
     }
 
-    public void setTotal_tests(int total_tests) {
-        this.total_tests = total_tests;
+    public void setTotalTests(int totalTests) {
+        this.totalTests = totalTests;
     }
 
-    public String getNew_deaths() {
-        return new_deaths;
+    public String getNewDeaths() {
+        return newDeaths;
     }
 
-    public void setNew_deaths(String new_deaths) {
-        this.new_deaths = new_deaths;
+    public void setNewDeaths(String newDeaths) {
+        this.newDeaths = newDeaths;
     }
 
-    public int getTotal_deaths() {
-        return total_deaths;
+    public int getTotalDeaths() {
+        return totalDeaths;
     }
 
-    public void setTotal_deaths(int total_deaths) {
-        this.total_deaths = total_deaths;
+    public void setTotalDeaths(int totalDeaths) {
+        this.totalDeaths = totalDeaths;
     }
 
-    public Date getObject_created() {
-        return object_created;
+    public Date getObjectCreated() {
+        return objectCreated;
     }
 
-    public void setObject_created(Date object_created) {
-        this.object_created = object_created;
+    public void setObjectCreated(Date objectCreated) {
+        this.objectCreated = objectCreated;
+    }
+
+    @Override
+    public String toString() {
+        return "CovidDataCountry [activeCases=" + activeCases + ", continent=" + continent + ", country=" + country
+                + ", criticalCases=" + criticalCases + ", day=" + day + ", id=" + id + ", newCases=" + newCases
+                + ", newDeaths=" + newDeaths + ", objectCreated=" + objectCreated + ", recoveredCases=" + recoveredCases
+                + ", totalCases=" + totalCases + ", totalDeaths=" + totalDeaths + ", totalTests=" + totalTests + "]";
     }
 }

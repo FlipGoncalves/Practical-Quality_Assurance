@@ -49,14 +49,15 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("continent", is(data.getContinent())))
                 .andExpect(jsonPath("country", is(data.getCountry())))
-                .andExpect(jsonPath("new_cases", is(data.getNew_cases())))
-                .andExpect(jsonPath("active_cases", is(data.getActive_cases())))
-                .andExpect(jsonPath("recovered_cases", is(data.getRecovered_cases())))
-                .andExpect(jsonPath("critical_cases", is(data.getCritical_cases())))
-                .andExpect(jsonPath("total_cases", is(data.getTotal_cases())))
-                .andExpect(jsonPath("total_deaths", is(data.getTotal_deaths())))
-                .andExpect(jsonPath("new_deaths", is(data.getNew_deaths())))
-                .andExpect(jsonPath("total_deaths", is(data.getTotal_tests())));
+                .andExpect(jsonPath("newCases", is(data.getNewCases())))
+                .andExpect(jsonPath("activeCases", is(data.getActiveCases())))
+                .andExpect(jsonPath("recoveredCases", is(data.getRecoveredCases())))
+                .andExpect(jsonPath("criticalCases", is(data.getCriticalCases())))
+                .andExpect(jsonPath("totalCases", is(data.getTotalCases())))
+                .andExpect(jsonPath("totalDeaths", is(data.getTotalDeaths())))
+                .andExpect(jsonPath("newDeaths", is(data.getNewDeaths())))
+                .andExpect(jsonPath("totalDeaths", is(data.getTotalTests())));
+
     }
 
     @Test
@@ -108,9 +109,9 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("hits", is(Cache.getHits())))
                 .andExpect(jsonPath("misses", is(Cache.getMisses())))
-                .andExpect(jsonPath("save_requests", is(Cache.getSave_requests())))
-                .andExpect(jsonPath("get_requests", is(Cache.getGet_requests())))
-                .andExpect(jsonPath("delete_requests", is(Cache.getDelete_requests())));
+                .andExpect(jsonPath("saveRequests", is(Cache.getsaveRequests())))
+                .andExpect(jsonPath("getRequests", is(Cache.getgetRequests())))
+                .andExpect(jsonPath("deleteRequests", is(Cache.getdeleteRequests())));
     }
 
     @Test
@@ -123,14 +124,14 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].continent", is(data.getContinent())))
                 .andExpect(jsonPath("$[0].country", is(data.getCountry())))
-                .andExpect(jsonPath("$[0].new_cases", is(data.getNew_cases())))
-                .andExpect(jsonPath("$[0].active_cases", is(data.getActive_cases())))
-                .andExpect(jsonPath("$[0].recovered_cases", is(data.getRecovered_cases())))
-                .andExpect(jsonPath("$[0].critical_cases", is(data.getCritical_cases())))
-                .andExpect(jsonPath("$[0].total_cases", is(data.getTotal_cases())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_deaths())))
-                .andExpect(jsonPath("$[0].new_deaths", is(data.getNew_deaths())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_tests())));
+                .andExpect(jsonPath("$[0].newCases", is(data.getNewCases())))
+                .andExpect(jsonPath("$[0].activeCases", is(data.getActiveCases())))
+                .andExpect(jsonPath("$[0].recoveredCases", is(data.getRecoveredCases())))
+                .andExpect(jsonPath("$[0].criticalCases", is(data.getCriticalCases())))
+                .andExpect(jsonPath("$[0].totalCases", is(data.getTotalCases())))
+                .andExpect(jsonPath("$[0].totalDeaths", is(data.getTotalDeaths())))
+                .andExpect(jsonPath("$[0].newDeaths", is(data.getNewDeaths())))
+                .andExpect(jsonPath("$[0].totalTests", is(data.getTotalTests())));
     }
 
     @Test
@@ -144,14 +145,14 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].continent", is(data.getContinent())))
                 .andExpect(jsonPath("$[0].country", is(data.getCountry())))
-                .andExpect(jsonPath("$[0].new_cases", is(data.getNew_cases())))
-                .andExpect(jsonPath("$[0].active_cases", is(data.getActive_cases())))
-                .andExpect(jsonPath("$[0].recovered_cases", is(data.getRecovered_cases())))
-                .andExpect(jsonPath("$[0].critical_cases", is(data.getCritical_cases())))
-                .andExpect(jsonPath("$[0].total_cases", is(data.getTotal_cases())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_deaths())))
-                .andExpect(jsonPath("$[0].new_deaths", is(data.getNew_deaths())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_tests())));
+                .andExpect(jsonPath("$[0].newCases", is(data.getNewCases())))
+                .andExpect(jsonPath("$[0].activeCases", is(data.getActiveCases())))
+                .andExpect(jsonPath("$[0].recoveredCases", is(data.getRecoveredCases())))
+                .andExpect(jsonPath("$[0].criticalCases", is(data.getCriticalCases())))
+                .andExpect(jsonPath("$[0].totalCases", is(data.getTotalCases())))
+                .andExpect(jsonPath("$[0].totalDeaths", is(data.getTotalDeaths())))
+                .andExpect(jsonPath("$[0].newDeaths", is(data.getNewDeaths())))
+                .andExpect(jsonPath("$[0].totalTests", is(data.getTotalTests())));
     }
 
     @Test
@@ -180,14 +181,14 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].continent", is(data.getContinent())))
                 .andExpect(jsonPath("$[0].country", is(data.getCountry())))
-                .andExpect(jsonPath("$[0].new_cases", is(data.getNew_cases())))
-                .andExpect(jsonPath("$[0].active_cases", is(data.getActive_cases())))
-                .andExpect(jsonPath("$[0].recovered_cases", is(data.getRecovered_cases())))
-                .andExpect(jsonPath("$[0].critical_cases", is(data.getCritical_cases())))
-                .andExpect(jsonPath("$[0].total_cases", is(data.getTotal_cases())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_deaths())))
-                .andExpect(jsonPath("$[0].new_deaths", is(data.getNew_deaths())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_tests())));
+                .andExpect(jsonPath("$[0].newCases", is(data.getNewCases())))
+                .andExpect(jsonPath("$[0].activeCases", is(data.getActiveCases())))
+                .andExpect(jsonPath("$[0].recoveredCases", is(data.getRecoveredCases())))
+                .andExpect(jsonPath("$[0].criticalCases", is(data.getCriticalCases())))
+                .andExpect(jsonPath("$[0].totalCases", is(data.getTotalCases())))
+                .andExpect(jsonPath("$[0].totalDeaths", is(data.getTotalDeaths())))
+                .andExpect(jsonPath("$[0].newDeaths", is(data.getNewDeaths())))
+                .andExpect(jsonPath("$[0].totalTests", is(data.getTotalTests())));
     }
 
     @Test
@@ -216,14 +217,14 @@ class APIControllerCovidDataCountryIT {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].continent", is(data.getContinent())))
                 .andExpect(jsonPath("$[0].country", is(data.getCountry())))
-                .andExpect(jsonPath("$[0].new_cases", is(data.getNew_cases())))
-                .andExpect(jsonPath("$[0].active_cases", is(data.getActive_cases())))
-                .andExpect(jsonPath("$[0].recovered_cases", is(data.getRecovered_cases())))
-                .andExpect(jsonPath("$[0].critical_cases", is(data.getCritical_cases())))
-                .andExpect(jsonPath("$[0].total_cases", is(data.getTotal_cases())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_deaths())))
-                .andExpect(jsonPath("$[0].new_deaths", is(data.getNew_deaths())))
-                .andExpect(jsonPath("$[0].total_deaths", is(data.getTotal_tests())));
+                .andExpect(jsonPath("$[0].newCases", is(data.getNewCases())))
+                .andExpect(jsonPath("$[0].activeCases", is(data.getActiveCases())))
+                .andExpect(jsonPath("$[0].recoveredCases", is(data.getRecoveredCases())))
+                .andExpect(jsonPath("$[0].criticalCases", is(data.getCriticalCases())))
+                .andExpect(jsonPath("$[0].totalCases", is(data.getTotalCases())))
+                .andExpect(jsonPath("$[0].totalDeaths", is(data.getTotalDeaths())))
+                .andExpect(jsonPath("$[0].newDeaths", is(data.getNewDeaths())))
+                .andExpect(jsonPath("$[0].totalTests", is(data.getTotalTests())));
     }
 
     @Test
@@ -252,14 +253,14 @@ class APIControllerCovidDataCountryIT {
     private CovidDataCountry createTestCountry() {
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");
 
-        data.setActive_cases(4);
-        data.setCritical_cases(4);
-        data.setNew_cases("+2");
-        data.setTotal_cases(10);
-        data.setRecovered_cases(2);
-        data.setNew_deaths("+2");
-        data.setTotal_deaths(4);
-        data.setTotal_tests(4);
+        data.setActiveCases(4);
+        data.setCriticalCases(4);
+        data.setNewCases("+2");
+        data.setTotalCases(10);
+        data.setRecoveredCases(2);
+        data.setNewDeaths("+2");
+        data.setTotalDeaths(4);
+        data.setTotalTests(4);
 
         return rep.saveAndFlush(data);
     }

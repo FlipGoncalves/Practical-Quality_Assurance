@@ -1,7 +1,6 @@
 package TQS_HW1.HW1.Controllers;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,24 +33,24 @@ public class APIController {
     private CovidDataCountryService service;
 
     @Autowired
-    private CovidDataRepository repository_data;
+    private CovidDataRepository repositoryData;
 
     @Autowired
-    private CovidDataCountryRepository country_rep;
+    private CovidDataCountryRepository repositoryCountry;
     
     @GetMapping("/all_data")
-    public ResponseEntity<List<CovidData>> getData(@RequestParam(value = "data", required = false) String data) throws ParseException, BadRequestException {
+    public ResponseEntity<List<CovidData>> getData(@RequestParam(value = "data", required = false) String data) throws BadRequestException {
         log.info("GET Request -> All Covid Data");
         List<CovidData> covid = service.getAllData();
         if (covid.isEmpty()) {
             throw new BadRequestException("Get All Data ERROR");
         }
-        repository_data.saveAll(covid);
+        repositoryData.saveAll(covid);
         return new ResponseEntity<>(covid, HttpStatus.OK);
     }
 
     @GetMapping("/get_data")
-    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws ParseException, IOException, BadRequestException, APINotRespondsException {
+    public ResponseEntity<CovidDataCountry> getDataByCountry(@RequestParam(value = "country", required = false) String country, @RequestParam(value = "date", required = false) String date) throws IOException, BadRequestException, APINotRespondsException {
         log.info("GET Request -> Covid Data by country: {}, and date: {}", country, date);
 
         CovidDataCountry data = service.getDataByCountry(country, date);
@@ -65,7 +64,7 @@ public class APIController {
     @GetMapping("/cache_statistics")
     public ResponseEntity<CacheView> getCacheStatistics() {
         log.info("GET Request -> All Cache Statistics");
-        CacheView jsonString = new CacheView(Cache.getHits(), Cache.getMisses(), Cache.getGet_requests(), Cache.getSave_requests(), Cache.getDelete_requests());
+        CacheView jsonString = new CacheView(Cache.getHits(), Cache.getMisses(), Cache.getgetRequests(), Cache.getsaveRequests(), Cache.getdeleteRequests());
 
         return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ public class APIController {
     @GetMapping("/cache_data")
     public ResponseEntity<List<CovidDataCountry>> getCachedData() {
         log.info("GET Request -> All Cached Data");
-        List<CovidDataCountry> data = country_rep.findAll();
+        List<CovidDataCountry> data = repositoryCountry.findAll();
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
@@ -81,7 +80,7 @@ public class APIController {
     @GetMapping("/get/country")
     public ResponseEntity<List<CovidDataCountry>> getDataByCountry(@RequestParam(value = "country", required = true) String country) throws BadRequestException {
         log.info("GET Request -> Covid Data by country: {}", country);
-        List<CovidDataCountry> data = country_rep.findAllByCountry(country);
+        List<CovidDataCountry> data = repositoryCountry.findAllByCountry(country);
         if (data.isEmpty()) {
             throw new BadRequestException("Get Country ERROR");
         }
@@ -91,7 +90,7 @@ public class APIController {
     @GetMapping("/get/continent")
     public ResponseEntity<List<CovidDataCountry>> getDataByContinent(@RequestParam(value = "continent", required = true) String continent) throws BadRequestException {
         log.info("GET Request -> Covid Data by continent: {}", continent);
-        List<CovidDataCountry> data = country_rep.findAllByContinent(continent);
+        List<CovidDataCountry> data = repositoryCountry.findAllByContinent(continent);
         if (data.isEmpty()) {
             throw new BadRequestException("Get Continent ERROR");
         }
@@ -99,9 +98,9 @@ public class APIController {
     }
 
     @GetMapping("/get/day")
-    public ResponseEntity<List<CovidDataCountry>> getDataByDay(@RequestParam(value = "day", required = true) String day) throws ParseException, BadRequestException {
+    public ResponseEntity<List<CovidDataCountry>> getDataByDay(@RequestParam(value = "day", required = true) String day) throws BadRequestException {
         log.info("GET Request -> Covid Data by day: {}", day);
-        List<CovidDataCountry> data = country_rep.findAllByDay(day);
+        List<CovidDataCountry> data = repositoryCountry.findAllByDay(day);
         if (data.isEmpty()) {
             throw new BadRequestException("Get Day ERROR");
         }

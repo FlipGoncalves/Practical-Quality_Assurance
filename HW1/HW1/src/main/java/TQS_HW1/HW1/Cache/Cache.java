@@ -3,7 +3,6 @@ package TQS_HW1.HW1.Cache;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.text.ParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,15 +20,15 @@ public class Cache {
 
     private static int hits = 0;
     private static int misses = 0;
-    private static int get_requests = 0;
-    private static int save_requests = 0;
-    private static int delete_requests = 0;
+    private static int getRequests = 0;
+    private static int saveRequests = 0;
+    private static int deleteRequests = 0;
 
     @Autowired
-    CovidDataCountryRepository covidcountry_rep;
+    CovidDataCountryRepository covidcountryRepository;
 
     @Autowired
-    CovidDataRepository covid_rep;
+    CovidDataRepository covidRepository;
 
     private static final Logger log = LoggerFactory.getLogger(Cache.class);
     private int timeToLive; // in seconds
@@ -42,11 +41,11 @@ public class Cache {
         this.timeToLive = 120;
     }
 
-    public CovidDataCountry getDataByCountry(String country, String date) throws ParseException {
-        get_requests++;
+    public CovidDataCountry getDataByCountry(String country, String date) {
+        getRequests++;
 
         log.info("Getting Covid data for {} for the day {} in the cache", country, date);
-        CovidDataCountry data = covidcountry_rep.findByCountryAndDay(country, date).orElse(null);
+        CovidDataCountry data = covidcountryRepository.findByCountryAndDay(country, date).orElse(null);
 
         if (data != null) {
             if (hasExpiredCountry(data)) {
@@ -67,13 +66,13 @@ public class Cache {
     }
 
     public CovidDataCountry saveDataCountry(CovidDataCountry data) {
-        save_requests++;
+        saveRequests++;
 
-        CovidDataCountry datacheck = covidcountry_rep.findByCountryAndDay(data.getCountry(), data.getDay()).orElse(null);
+        CovidDataCountry datacheck = covidcountryRepository.findByCountryAndDay(data.getCountry(), data.getDay()).orElse(null);
         CovidDataCountry result;
     
         if (datacheck == null) {
-            result = covidcountry_rep.saveAndFlush(data);
+            result = covidcountryRepository.saveAndFlush(data);
             log.info("Stored Data {} on cache", result);
             hits++;
         } else {
@@ -85,23 +84,23 @@ public class Cache {
     }
 
     public void deleteDatafromCache(CovidDataCountry data)  {
-        delete_requests++;
+        deleteRequests++;
 
-        covidcountry_rep.delete(data);
+        covidcountryRepository.delete(data);
     }
 
-    public boolean hasExpiredCountry(CovidDataCountry data) throws ParseException {
+    public boolean hasExpiredCountry(CovidDataCountry data) {
         log.info("Checking if data {} is expired", data);
         Date expiredDate = new Date(System.currentTimeMillis() - this.timeToLive * 1000);
-        Date dataDate = data.getObject_created();
+        Date dataDate = data.getObjectCreated();
         return dataDate.before(expiredDate);
     }
 
-    public List<CovidData> getAllData() throws ParseException {
-        get_requests++;
+    public List<CovidData> getAllData() {
+        getRequests++;
 
         log.info("Getting All Covid data in the cache");
-        List<CovidData> d = covid_rep.findAll();
+        List<CovidData> d = covidRepository.findAll();
 
         if (!d.isEmpty()) {
             if (hasExpiredCountry(d)) {
@@ -122,12 +121,12 @@ public class Cache {
     }
 
     public List<CovidData> saveData(List<CovidData> data) {
-        List<CovidData> datacheck = covid_rep.findAll();
+        List<CovidData> datacheck = covidRepository.findAll();
         List<CovidData> result = null;
-        save_requests++;
+        saveRequests++;
 
         if (datacheck.isEmpty()) {
-            result = covid_rep.saveAllAndFlush(data);
+            result = covidRepository.saveAllAndFlush(data);
             log.info("Stored Data {} on cache", result.getClass());
             hits++;
         } else {
@@ -140,14 +139,14 @@ public class Cache {
     }
 
     public void deleteDatafromCache(List<CovidData> data)  {
-        delete_requests++;
-        covid_rep.deleteAll(data);
+        deleteRequests++;
+        covidRepository.deleteAll(data);
     }
 
-    public boolean hasExpiredCountry(List<CovidData> data) throws ParseException {
+    public boolean hasExpiredCountry(List<CovidData> data) {
         log.info("Checking if data {} is expired", data.getClass());
         Date expiredDate = new Date(System.currentTimeMillis() - this.timeToLive * 1000);
-        Date dataDate = data.get(0).getObject_created();
+        Date dataDate = data.get(0).getObjectCreated();
         return dataDate.before(expiredDate);
     }
 
@@ -162,25 +161,25 @@ public class Cache {
         return misses;
     }
 
-    public static int getGet_requests() {
-        return get_requests;
+    public static int getgetRequests() {
+        return getRequests;
     }
 
-    public static int getSave_requests() {
-        return save_requests;
+    public static int getsaveRequests() {
+        return saveRequests;
     }
 
-    public static int getDelete_requests() {
-        return delete_requests;
+    public static int getdeleteRequests() {
+        return deleteRequests;
     }
 
     // Testing issues
     public static void setAll() {
         Cache.setHits(0);
-        Cache.setDelete_requests(0);
-        Cache.setGet_requests(0);
+        Cache.setdeleteRequests(0);
+        Cache.setgetRequests(0);
         Cache.setMisses(0);
-        Cache.setSave_requests(0);
+        Cache.setsaveRequests(0);
     }
 
     public static void setHits(int hits) {
@@ -191,15 +190,15 @@ public class Cache {
         Cache.misses = misses;
     }
 
-    public static void setGet_requests(int get_requests) {
-        Cache.get_requests = get_requests;
+    public static void setgetRequests(int getRequests) {
+        Cache.getRequests = getRequests;
     }
 
-    public static void setSave_requests(int save_requests) {
-        Cache.save_requests = save_requests;
+    public static void setsaveRequests(int saveRequests) {
+        Cache.saveRequests = saveRequests;
     }
 
-    public static void setDelete_requests(int delete_requests) {
-        Cache.delete_requests = delete_requests;
+    public static void setdeleteRequests(int deleteRequests) {
+        Cache.deleteRequests = deleteRequests;
     }
 }

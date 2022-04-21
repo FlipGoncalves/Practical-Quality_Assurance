@@ -51,7 +51,7 @@ public class CovidDataResolver {
     }
 
     public List<CovidData> dataToJson(String data) {
-        List<CovidData> result = new ArrayList<CovidData>();
+        List<CovidData> result = new ArrayList<>();
 
         try {
             JSONObject json = new JSONObject(data);

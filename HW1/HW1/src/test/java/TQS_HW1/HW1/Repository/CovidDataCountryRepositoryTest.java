@@ -1,6 +1,8 @@
 package TQS_HW1.HW1.Repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,21 +32,21 @@ public class CovidDataCountryRepositoryTest {
     public void findByCountryAndDayTest() {
         
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");
-        data.setActive_cases(2);
-        data.setCritical_cases(1);
-        data.setNew_cases("+0");
-        data.setRecovered_cases(1);
-        data.setTotal_cases(4);
-        data.setTotal_tests(8);
-        data.setTotal_deaths(2);
-        data.setNew_deaths("+1");
+        data.setActiveCases(2);
+        data.setCriticalCases(1);
+        data.setNewCases("+0");
+        data.setRecoveredCases(1);
+        data.setTotalCases(4);
+        data.setTotalTests(8);
+        data.setTotalDeaths(2);
+        data.setNewDeaths("+1");
 
         entityManager.persistAndFlush(data);
 
         Optional<CovidDataCountry> data_get = covid_country_rep.findByCountryAndDay("Portugal", "2021-04-11");
 
         assertThat(data_get).isNotEmpty();
-        assertThat(data_get.get()).isEqualTo(data);
+        assertEquals(data, data_get.get());
     }
 
     @Test
@@ -69,20 +71,20 @@ public class CovidDataCountryRepositoryTest {
     @Test
     public void findByCountryTest() {
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");
-        data.setActive_cases(2);
-        data.setCritical_cases(1);
-        data.setNew_cases("+0");
-        data.setRecovered_cases(1);
-        data.setTotal_cases(4);
-        data.setTotal_tests(8);
-        data.setTotal_deaths(2);
-        data.setNew_deaths("+1");
+        data.setActiveCases(2);
+        data.setCriticalCases(1);
+        data.setNewCases("+0");
+        data.setRecoveredCases(1);
+        data.setTotalCases(4);
+        data.setTotalTests(8);
+        data.setTotalDeaths(2);
+        data.setNewDeaths("+1");
 
         entityManager.persistAndFlush(data);
 
         List<CovidDataCountry> data_get = covid_country_rep.findAllByCountry("Portugal");
 
-        assertThat(data_get).isNotNull();
+        assertNotNull(data_get);
         assertThat(data_get).isEqualTo(Arrays.asList(data));
     }
 
@@ -96,20 +98,20 @@ public class CovidDataCountryRepositoryTest {
     @Test
     public void findByContinentTest() {
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");
-        data.setActive_cases(2);
-        data.setCritical_cases(1);
-        data.setNew_cases("+0");
-        data.setRecovered_cases(1);
-        data.setTotal_cases(4);
-        data.setTotal_tests(8);
-        data.setTotal_deaths(2);
-        data.setNew_deaths("+1");
+        data.setActiveCases(2);
+        data.setCriticalCases(1);
+        data.setNewCases("+0");
+        data.setRecoveredCases(1);
+        data.setTotalCases(4);
+        data.setTotalTests(8);
+        data.setTotalDeaths(2);
+        data.setNewDeaths("+1");
 
         entityManager.persistAndFlush(data);
 
         List<CovidDataCountry> data_get = covid_country_rep.findAllByContinent("Europe");
 
-        assertThat(data_get).isNotNull();
+        assertNotNull(data_get);
         assertThat(data_get).isEqualTo(Arrays.asList(data));
     }
 
@@ -123,20 +125,20 @@ public class CovidDataCountryRepositoryTest {
     @Test
     public void findByDayTest() {
         CovidDataCountry data = new CovidDataCountry("Portugal", "Europe", "2021-04-11");
-        data.setActive_cases(2);
-        data.setCritical_cases(1);
-        data.setNew_cases("+0");
-        data.setRecovered_cases(1);
-        data.setTotal_cases(4);
-        data.setTotal_tests(8);
-        data.setTotal_deaths(2);
-        data.setNew_deaths("+1");
+        data.setActiveCases(2);
+        data.setCriticalCases(1);
+        data.setNewCases("+0");
+        data.setRecoveredCases(1);
+        data.setTotalCases(4);
+        data.setTotalTests(8);
+        data.setTotalDeaths(2);
+        data.setNewDeaths("+1");
 
         entityManager.persistAndFlush(data);
 
         List<CovidDataCountry> data_get = covid_country_rep.findAllByDay("2021-04-11");
 
-        assertThat(data_get).isNotNull();
+        assertNotNull(data_get);
         assertThat(data_get).isEqualTo(Arrays.asList(data));
     }
 
