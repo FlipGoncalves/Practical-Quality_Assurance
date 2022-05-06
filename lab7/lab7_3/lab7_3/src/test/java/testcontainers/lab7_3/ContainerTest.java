@@ -1,6 +1,5 @@
 package testcontainers.lab7_3;
 
-import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,10 +17,10 @@ import testcontainers.lab7_3.Repository.movieRepository;
 public class ContainerTest {
   
   @Container
-  public static PostgreSQLContainer container = new PostgreSQLContainer( "postgres:11.1" )
-    .withDatabaseName( "db-test-lab-7-3" )
-    .withUsername( "sa" )
-    .withPassword( "sa" );
+  public static PostgreSQLContainer container = new PostgreSQLContainer<>("postgres:alpine")
+    .withDatabaseName( "db-test" )
+    .withUsername( "filipe" )
+    .withPassword( "tqs" );
   
   @Autowired
   private movieRepository rep;
