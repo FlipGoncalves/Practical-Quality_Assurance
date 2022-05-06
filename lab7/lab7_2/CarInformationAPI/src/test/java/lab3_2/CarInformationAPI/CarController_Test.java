@@ -15,14 +15,9 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -52,7 +47,7 @@ class CarController_Test {
 		Car car = new Car((long) 1100, "BMW", "A5"); 		// (CarId, CarMaker, CarModel)
 		when(service.createCar(Mockito.any())).thenReturn(car);
 
-        given().contentType( ContentType.JSON ).body( car ).post( "/api/car" ).then().body().assertThat().body( "maker", is( "BMW" ) );
+        given().contentType( ContentType.JSON ).body( car ).post( "/api/car" ).then().assertThat().body( "maker", is( "BMW" ) );
 
         // mvc.perform(
         //         post("/api/car").contentType(MediaType.APPLICATION_JSON).content(asJsonString(car)))

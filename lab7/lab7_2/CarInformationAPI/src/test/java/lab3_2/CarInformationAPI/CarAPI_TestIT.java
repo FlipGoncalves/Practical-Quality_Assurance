@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,17 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = CarInformationApiApplication.class)
 @AutoConfigureMockMvc
-// adapt AutoConfigureTestDatabase with TestPropertySource to use a real database
-@TestPropertySource(properties = {
-  "spring.datasource.url=jdbc:mysql://localhost:33060/tqsdemo",
-  "spring.datasource.driver-class-name=com.mysql.jdbc.Driver",
-  "spring.jpa.hibernate.ddl-auto=create-drop",
-  "spring.datasource.username=demo",
-  "spring.datasource.password=demo"
-})
+@AutoConfigureTestDatabase
 
-// switch AutoConfigureTestDatabase with TestPropertySource to use a real database
-//@TestPropertySource( locations = "application-integrationtest.properties")
 class CarAPI_TestIT {
 
     // will need to use the server port for the invocation url
