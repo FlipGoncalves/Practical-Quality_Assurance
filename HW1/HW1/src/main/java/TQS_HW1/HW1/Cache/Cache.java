@@ -42,7 +42,7 @@ public class Cache {
     }
 
     public CovidDataCountry getDataByCountry(String country, String date) {
-        getRequests++;
+        incrGet();
 
         log.info("Getting Covid data for {} for the day {} in the cache", country, date);
         CovidDataCountry data = covidcountryRepository.findByCountryAndDay(country, date).orElse(null);
@@ -50,23 +50,23 @@ public class Cache {
         if (data != null) {
             if (hasExpiredCountry(data)) {
                 log.info("Data expired in the cache");
-                misses++;
+                incrMiss();
                 deleteDatafromCache(data);
                 return null;
             } else {
                 log.info("Data retrieved from cache");
-                hits++;
+                incrHits();
                 return data;
             }
         } else {
             log.info("Covid Data not found in the cache");
-            misses++;                                               
+            incrMiss();                                               
             return null;
         }
     }
 
     public CovidDataCountry saveDataCountry(CovidDataCountry data) {
-        saveRequests++;
+        incrSave();
 
         CovidDataCountry datacheck = covidcountryRepository.findByCountryAndDay(data.getCountry(), data.getDay()).orElse(null);
         CovidDataCountry result;
@@ -74,17 +74,17 @@ public class Cache {
         if (datacheck == null) {
             result = covidcountryRepository.saveAndFlush(data);
             log.info("Stored Data {} on cache", result);
-            hits++;
+            incrHits();
         } else {
             result = datacheck;
             log.info("Covid Data {} was already on cache", result);
-            misses++;
+            incrMiss();
         }
         return result;
     }
 
     public void deleteDatafromCache(CovidDataCountry data)  {
-        deleteRequests++;
+        incrDel();
 
         covidcountryRepository.delete(data);
     }
@@ -97,7 +97,7 @@ public class Cache {
     }
 
     public List<CovidData> getAllData() {
-        getRequests++;
+        incrGet();
 
         log.info("Getting All Covid data in the cache");
         List<CovidData> d = covidRepository.findAll();
@@ -105,17 +105,17 @@ public class Cache {
         if (!d.isEmpty()) {
             if (hasExpiredCountry(d)) {
                 log.info("Data {} expired in the cache", d.getClass());
-                misses++;
+                incrMiss();
                 deleteDatafromCache(d);
                 return Arrays.asList();
             } else {
                 log.info("Data {} retrieved from cache", d.getClass());
-                hits++;
+                incrHits();
                 return d;
             }
         } else {
             log.info("Covid Data not found in the cache");
-            misses++;          
+            incrMiss();          
             return Arrays.asList();                               
         }
     }
@@ -123,23 +123,23 @@ public class Cache {
     public List<CovidData> saveData(List<CovidData> data) {
         List<CovidData> datacheck = covidRepository.findAll();
         List<CovidData> result = null;
-        saveRequests++;
+        incrSave();
 
         if (datacheck.isEmpty()) {
             result = covidRepository.saveAllAndFlush(data);
             log.info("Stored Data {} on cache", result.getClass());
-            hits++;
+            incrHits();
         } else {
             result = datacheck;
             log.info("Covid Data {} was already on cache", result.getClass());
-            misses++;
+            incrMiss();
         }
 
         return result;
     }
 
     public void deleteDatafromCache(List<CovidData> data)  {
-        deleteRequests++;
+        incrDel();
         covidRepository.deleteAll(data);
     }
 
@@ -151,6 +151,21 @@ public class Cache {
     }
 
 
+    public static void incrHits() {
+        hits++;
+    }
+    public static void incrMiss() {
+        misses++;
+    }
+    public static void incrGet() {
+        getRequests++;
+    }
+    public static void incrSave() {
+        saveRequests++;
+    }
+    public static void incrDel() {
+        deleteRequests++;
+    }
 
 
     public static int getHits() {
